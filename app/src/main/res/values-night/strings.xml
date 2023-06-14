@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sub_menu_title">Sub Menu Title</string>
+    <string name="iconback">IconBack</string>
+    <string name="scan_pallet">Scan Pallet</string>
+    <string name="scan_lokasi">Scan Lokasi</string>
+    <string name="scan">SCAN</string>
+    <string name="lanjut">LANJUT</string>
+    <string name="simpan">SIMPAN</string>
+    <string name="login">LOGIN</string>
+    <string name="username">Username</string>
+    <string name="background">Background</string>
+    <string name="logo">Logo</string>
+    <string name="database_title">Database Title</string>
+    <string name="silahkan_login">Silahkan Login</string>
+    <string name="pilih_database">Pilih Database</string>
+    <string name="logo_home">Logo Home</string>
+    <string name="iconlogout">IconLogout</string>
+    <string name="welcome_title">Selamat bekerja,</string>
+    <string name="welcome_fullname">Dede Tri Kurniawan Whh</string>
+    <string name="iconpenerimaan">IconPenerimaan</string>
+    <string name="botnav_penerimaan">Penerimaan</string>
+    <string name="iconpenyimpanan">IconPenyimpanan</string>
+    <string name="botnav_penyimpanan">Penyimpanan</string>
+    <string name="iconpengambilan">IconPengambilan</string>
+    <string name="botnav_pengambilan">Pengambilan</string>
+    <string name="iconpengeluaran">IconPengeluaran</string>
+    <string name="botnav_pengeluaran">Pengeluaran</string>
+</resources>

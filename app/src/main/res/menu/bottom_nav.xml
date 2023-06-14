@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Penerimaan"
+        android:id="@+id/bot_nav_penerimaan"
+        android:icon="@drawable/ic_twotone_receipt_long_24"/>
+
+    <item
+        android:title="Penyimpanan"
+        android:id="@+id/bot_nav_penyimpanan"
+        android:icon="@drawable/ic_twotone_receipt_long_24"/>
+
+    <item
+        android:title="Home"
+        android:id="@+id/bot_nav_home"
+        android:icon="@drawable/ic_baseline_home_24"/>
+
+    <item
+        android:title="Pengambilan"
+        android:id="@+id/bot_nav_pengambilan"
+        android:icon="@drawable/ic_twotone_receipt_long_24"/>
+
+    <item
+        android:title="Pengeluaran"
+        android:id="@+id/bot_nav_pengeluaran"
+        android:icon="@drawable/ic_twotone_receipt_long_24"/>
+
+</menu>
