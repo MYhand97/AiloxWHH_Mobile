@@ -37,6 +37,8 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
     private var swipeRefreshLayout : SwipeRefreshLayout? = null
     private var progressBar : ProgressBar? = null
     private var searchView : SearchView? = null
+    private var loc_name : String? = null
+    private var loc_cd : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +59,22 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+
+        //check loc_name dan loc_cd
+        if(session.getString("loc_name_baru", null).equals(null) &&
+            session.getString("loc_cd_baru", null).equals(null)){
+            loc_name = session.getString("loc_name", null).toString()
+            loc_cd = session.getString("loc_cd", null).toString()
+        }else{
+            loc_name = session.getString("loc_name_baru", null).toString()
+            loc_cd = session.getString("loc_cd_baru", null).toString()
+        }
+        //end check
+
         val titleMenu : TextView = findViewById(R.id.submenu_title)
         titleMenu.text = session.getString("sub_menu_title", null)+
                 "\nLPN: "+ session.getString("lpn_id", null)+
-                "\nLokasi: "+ session.getString("loc_name", null)
+                "\nLokasi: "+ loc_name
 
         searchView = findViewById(R.id.pp1_searchview)
         searchView!!.setOnClickListener { search(searchView!!) }
@@ -148,6 +162,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
 
     private fun saveItem(){
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+
         val btnSimpan : Button = findViewById(R.id.btn_simpan)
         btnSimpan.setOnClickListener {
             val res : RequestApi = ApiServer().koneksiRetrofit().create(
@@ -161,7 +176,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                     lpn_id = session.getString("lpn_id", null),
                     rcpt_number = session.getString("rcpt_number", null),
                     rcpt_header_ids = session.getString("rcpt_header_ids", null),
-                    loc_name = session.getString("loc_name", null),
+                    loc_name = loc_name,
                     loc_id = session.getString("loc_id", null)
                 )
             )
@@ -171,14 +186,19 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                     response: Response<ResponseSaveItem>
                 ) {
                     val message = response.body()?.message.toString()
-                    if(message.isEmpty()){
-                        removeSharedPreferences()
-                        startActivity(
-                            Intent(applicationContext, PutawayInValLpnActivity::class.java)
-                        )
-                        finish()
-                    }else{
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                    when(message){
+                        "Berhasil Simpan" -> {
+                            removeSharedPreferences()
+                            startActivity(
+                                Intent(applicationContext, PutawayInValLpnActivity::class.java)
+                            )
+                            finish()
+                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        }
+
                     }
                 }
 
@@ -196,6 +216,9 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
             .putString("lpn_id", null)
             .putString("loc_name", null)
             .putString("loc_cd", null)
+            .putString("loc_name_baru", null)
+            .putString("loc_cd_baru", null)
+            .putString("locating_manual", null)
             .putString("err_message", null)
             .putString("ship_number", null)
             .putString("rcpt_number", null)
@@ -205,7 +228,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         startActivity(
-            Intent(applicationContext, PutawayModLocatingActivity::class.java)
+            Intent(applicationContext, PutawayModInLocActivity::class.java)
         )
         finish()
     }
@@ -214,7 +237,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
         val backBtn : ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
             startActivity(
-                Intent(applicationContext, PutawayModDisplayLPNActivity::class.java)
+                Intent(applicationContext, PutawayModInLocActivity::class.java)
             )
             finish()
         }

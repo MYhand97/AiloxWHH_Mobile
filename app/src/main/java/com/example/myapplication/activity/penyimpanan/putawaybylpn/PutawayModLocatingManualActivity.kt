@@ -89,7 +89,14 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
                 adapterPutawayMasterLocation = AdapterPutawayMasterLocation(
                     applicationContext, list!!, object : AdapterPutawayMasterLocation.onAdapterListener{
                         override fun onClick(list: ResponsePutawayGetMasterLocation) {
-                            Toast.makeText(applicationContext, list.loc_cd+" - "+list.loc_name, Toast.LENGTH_SHORT).show()
+                            session.edit()
+                                .putString("loc_name_baru", list.loc_name)
+                                .putString("loc_cd_baru", list.loc_cd)
+                                .putString("locating_manual", "true")
+                                .apply()
+                            startActivity(
+                                Intent(applicationContext, PutawayModInLocActivity::class.java)
+                            )
                         }
                     }
                 )

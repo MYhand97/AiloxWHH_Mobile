@@ -20,7 +20,6 @@ class EceranScanLPNActivity : AppCompatActivity(), ZXingScannerView.ResultHandle
 
         mScannerView = ZXingScannerView(this)   // Programmatically initialize the scanner view
         setContentView(mScannerView)
-
     }
 
     override fun onResume() {
