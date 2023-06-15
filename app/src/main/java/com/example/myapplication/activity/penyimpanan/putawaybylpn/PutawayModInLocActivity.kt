@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
 import com.example.myapplication.data.api.ApiServer
@@ -17,7 +16,6 @@ import com.example.myapplication.data.api.request.RequestApi
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataCheckLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayCheckLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.ResponsePutawayCheckLocation
-import com.example.myapplication.models.penyimpanan.putawaybylpn.ResponsePutawayGetAllocation
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -74,7 +72,7 @@ class PutawayModInLocActivity : AppCompatActivity() {
             if(edScanLokasi.text!!.isEmpty()){
                 edScanLokasi.error = "Scan Lokasi tidak boleh kosong"
             }else{
-                if(edScanLokasi.text.toString() == session.getString("loc_cd", null).toString()){
+                if(edScanLokasi.text.toString().equals(session.getString("loc_cd", null).toString(), ignoreCase = true)){
                     val res : RequestApi = ApiServer().koneksiRetrofit().create(
                         RequestApi::class.java
                     )
@@ -94,7 +92,9 @@ class PutawayModInLocActivity : AppCompatActivity() {
                             list = response.body()?.data
                             when(message){
                                 "" -> {
-                                    Toast.makeText(applicationContext, list?.get(0)?.vLocName.toString(), Toast.LENGTH_SHORT).show()
+                                    startActivity(
+                                        Intent(applicationContext, PutawayModDisplayLPNActivity::class.java)
+                                    )
                                 }
                                 else -> {
                                     edScanLokasi.error = message.toString()

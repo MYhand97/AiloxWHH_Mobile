@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_1100"
-    tools:context=".activity.penerimaan.penerimaaneceran.EceranInValItemAcitivity">
+    tools:context=".activity.penyimpanan.putawaybylpn.PutawayModDisplayLPNActivity"
+    android:background="@color/teal_1100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/topBar"
@@ -95,24 +96,10 @@
         app:layout_constraintTop_toBottomOf="@id/pp1_searchview">
 
         <TextView
-            android:layout_width="@dimen/_100sdp"
+            android:layout_width="@dimen/_180sdp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16sdp"
             android:text="Barang" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/darker_gray" />
-
-        <TextView
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:text="Pesan" />
 
         <View
             android:layout_width="1dp"
@@ -129,24 +116,15 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!--View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@id/swl_data_pp1"
-        app:layout_constraintTop_toBottomOf="@id/title" /-->
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@id/swl_data_pp1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_10ssp"
         android:layout_marginEnd="@dimen/_10ssp"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_1sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/_1sdp"
+        app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title">
@@ -158,9 +136,74 @@
             android:background="@color/white"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            tools:listitem="@layout/rows_penerimaan_eceran_item" />
+            tools:listitem="@layout/rows_putaway_mod_display_lpn" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@id/layoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/swl_data_pp1">
+
+        <TextView
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:text="Total" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/total_qty"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="Terima" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:id="@id/layoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btn_simpan"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:text="@string/simpan"
+            android:textColor="@color/white"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@id/pb_data"
@@ -172,35 +215,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
-
-    <LinearLayout
-        android:id="@id/layoutButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
-        app:layout_constraintTop_toBottomOf="@id/swl_data_pp1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <Button
-            android:id="@+id/btn_scan"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:text="@string/scan"
-            android:textColor="@color/white"
-            android:background="@color/teal_700"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            style="?android:attr/buttonBarButtonStyle" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

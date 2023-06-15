@@ -17,6 +17,7 @@ import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutaw
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetMasterLocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayModDisplayLPN
 import com.example.myapplication.data.api.response.penyimpanan.ResponsePutawayGetPalletNumber
+import com.example.myapplication.data.api.response.penyimpanan.ResponseSaveItem
 import com.example.myapplication.models.ModelsSelectDB
 import com.example.myapplication.models.RequestMainMenu
 import com.example.myapplication.models.RequestModelsUsers
@@ -36,6 +37,7 @@ import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayG
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetItemInLPN
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetMasterLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayModDisplayLPN
+import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestSaveItem
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -128,4 +130,8 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("penyimpanan/putaway_proses.php")
     fun putawayModDisplayLPN(@Body dataPost: RequestPutawayModDisplayLPN): Call<ResponseDataPutawayModDisplayLPN>
+
+    @Headers("Content-Type: application/json")
+    @POST("penyimpanan/putaway_proses.php")
+    fun putawaySaveItem(@Body dataPost: RequestSaveItem): Call<ResponseSaveItem>
 }

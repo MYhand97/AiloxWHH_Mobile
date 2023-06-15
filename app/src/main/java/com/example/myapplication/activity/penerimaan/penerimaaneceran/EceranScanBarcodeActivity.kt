@@ -31,22 +31,10 @@ class EceranScanBarcodeActivity : AppCompatActivity(), ZXingScannerView.ResultHa
 
         mScannerView = ZXingScannerView(this)   // Programmatically initialize the scanner view
         setContentView(mScannerView)
-
-        requestCamera = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
-                Toast.makeText(applicationContext, "Camera Permission granted", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                Toast.makeText(applicationContext, "Camera Permission not granted", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
     }
 
     override fun onResume() {
         super.onResume()
-        requestCamera.launch(Manifest.permission.CAMERA)
         mScannerView!!.setResultHandler(this)
         mScannerView!!.startCamera()
     }

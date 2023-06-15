@@ -49,10 +49,16 @@ class AdapterEceranValItem(var context: Context, var list: List<ResponseValItem>
             "Single" -> {
                 holder.tvItemDescription.text = responseValItem.item_design.toString()
                 holder.tvItemDesign.text = responseValItem.item_description.toString()
+                holder.itemView.setOnClickListener {
+                    listener.onClick(responseValItem)
+                }
             }
             "Multi" -> {
                 holder.tvItemDescription.text = responseValItem.item_design.toString()
                 holder.tvItemDesign.text = responseValItem.item_description.toString()
+                holder.itemView.setOnClickListener {
+                    listener.onClick(responseValItem)
+                }
             }
             else -> {
                 holder.tvItemDescription.text = responseValItem.item_barcode.toString()
@@ -62,9 +68,6 @@ class AdapterEceranValItem(var context: Context, var list: List<ResponseValItem>
         holder.tvItemId.text = responseValItem.item_id.toString()
         holder.tvOrderedQty.text = responseValItem.t_rcpt_ordered_qty.toString()
         holder.tvReceivedQty.text = responseValItem.t_rcpt_received_qty.toString()
-        holder.itemView.setOnClickListener {
-            listener.onClick(responseValItem)
-        }
     }
 
 
