@@ -1,10 +1,12 @@
 package com.example.myapplication.activity.penyimpanan.putawaybylpn
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -12,6 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
 
 class PutawayModLocatingActivity : AppCompatActivity() {
+
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,8 @@ class PutawayModLocatingActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initViews(){
+        initCustomDialog()
+
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val titleMenu : TextView = findViewById(R.id.submenu_title)
         titleMenu.text = session.getString("sub_menu_title", null)+
@@ -31,6 +37,8 @@ class PutawayModLocatingActivity : AppCompatActivity() {
 
         val btnLihatBarang : TextView = findViewById(R.id.putaway_textbtn)
         btnLihatBarang.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModLPNItemActivity::class.java)
             )
@@ -38,6 +46,8 @@ class PutawayModLocatingActivity : AppCompatActivity() {
 
         val btnLokasiAsli : Button = findViewById(R.id.btn_putaway_locating_lokasiawal)
         btnLokasiAsli.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModInLocActivity::class.java)
             )
@@ -45,6 +55,8 @@ class PutawayModLocatingActivity : AppCompatActivity() {
 
         val btnLokasiLain : Button = findViewById(R.id.btn_putaway_locating_lokasilain)
         btnLokasiLain.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModLocatingManualActivity::class.java)
             )
@@ -52,6 +64,13 @@ class PutawayModLocatingActivity : AppCompatActivity() {
 
         btnBackPressed()
         settingSession()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PutawayModLocatingActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun settingSession(){
@@ -87,7 +106,9 @@ class PutawayModLocatingActivity : AppCompatActivity() {
     private fun btnBackPressed(){
         val backBtn: ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
             removeSharedPreferences()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayInValLpnActivity::class.java)
             )
@@ -97,7 +118,9 @@ class PutawayModLocatingActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
         removeSharedPreferences()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, PutawayInValLpnActivity::class.java)
         )

@@ -1,9 +1,11 @@
 package com.example.myapplication.activity.penerimaan.penerimaaneceran
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +31,7 @@ class EceranSubMenuActivity : AppCompatActivity() {
     private var linearLayoutManager: LinearLayoutManager? = null
     private var list: List<ResponseSubMenu>? = null
     private var adapterEceranMenu: AdapterEceranMenu? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +51,18 @@ class EceranSubMenuActivity : AppCompatActivity() {
                 "\nLPN: "+
                 session.getString("lpn_id", null)
 
+        initCustomDialog()
+
         setupRecycleView()
         retrieveSubMenu()
         backBtnPress()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@EceranSubMenuActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun setupRecycleView(){
@@ -60,6 +72,7 @@ class EceranSubMenuActivity : AppCompatActivity() {
     }
 
     private fun retrieveSubMenu(){
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -98,6 +111,7 @@ class EceranSubMenuActivity : AppCompatActivity() {
                 })
                 recyclerView?.adapter = adapterEceranMenu
                 adapterEceranMenu!!.notifyDataSetChanged()
+                customDialog!!.dismiss()
             }
 
             override fun onFailure(call: Call<ResponseGetSubMenu>, t: Throwable) {
@@ -119,6 +133,7 @@ class EceranSubMenuActivity : AppCompatActivity() {
     }
 
     private fun releaseRcptStatus(){
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -135,6 +150,7 @@ class EceranSubMenuActivity : AppCompatActivity() {
                 call: Call<ResponseRcptHeader>,
                 response: Response<ResponseRcptHeader>
             ) {
+                customDialog!!.dismiss()
                 /*removeSharedPreferences()
                 startActivity(
                     Intent(applicationContext, PenerimaanEceranActivity::class.java)
@@ -158,7 +174,9 @@ class EceranSubMenuActivity : AppCompatActivity() {
     private fun backBtnPress(){
         val btnBack: ConstraintLayout = findViewById(R.id.submenu_backicon)
         btnBack.setOnClickListener{
+            customDialog!!.show()
             removeSharedPreferences()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, EceranInValLPNActivity::class.java)
             )
@@ -167,7 +185,9 @@ class EceranSubMenuActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        customDialog!!.show()
         removeSharedPreferences()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, EceranInValLPNActivity::class.java)
         )

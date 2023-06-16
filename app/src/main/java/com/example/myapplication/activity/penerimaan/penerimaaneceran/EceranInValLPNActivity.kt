@@ -1,9 +1,11 @@
 package com.example.myapplication.activity.penerimaan.penerimaaneceran
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -25,6 +27,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class EceranInValLPNActivity : AppCompatActivity() {
+
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +63,17 @@ class EceranInValLPNActivity : AppCompatActivity() {
             requestCamera.launch(android.Manifest.permission.CAMERA)
         }
 
+        initCustomDialog()
+
         backBtnPressed()
         checkScanValue()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@EceranInValLPNActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun checkScanValue(){
@@ -69,7 +82,9 @@ class EceranInValLPNActivity : AppCompatActivity() {
         val edScanPallet : TextInputEditText = findViewById(R.id.ed_scanPallet)
 
         btnLanjut.setOnClickListener {
+            customDialog!!.show()
             if(edScanPallet.text?.isEmpty() == true){
+                customDialog!!.dismiss()
                 edScanPallet.error = "Scan Pallet tidak boleh kosong"
             }else{
                 val res: RequestApi = ApiServer().koneksiRetrofit().create(
@@ -91,15 +106,19 @@ class EceranInValLPNActivity : AppCompatActivity() {
                         val data: List<ResponseLPN>? = response.body()?.data
                         when (message) {
                             "LPN belum terdaftar" -> {
+                                customDialog!!.dismiss()
                                 edScanPallet.error = "LPN belum terdaftar"
                             }
                             "LPN ada lebih dari 1" -> {
+                                customDialog!!.dismiss()
                                 edScanPallet.error = "LPN ada lebih dari 1"
                             }
                             "LPN sedang di proses" -> {
+                                customDialog!!.show()
                                 edScanPallet.error = "LPN sedang di proses"
                             }
                             "LPN sudah di gunakan" -> {
+                                customDialog!!.show()
                                 edScanPallet.error = "LPN sudah di gunakan"
                             }
                             else -> {
@@ -107,6 +126,7 @@ class EceranInValLPNActivity : AppCompatActivity() {
                                     .edit()
                                     .putString("lpn_id", data?.get(0)?.lpn_id)
                                     .apply()
+                                customDialog!!.dismiss()
                                 startActivity(
                                     Intent(applicationContext, EceranSubMenuActivity::class.java)
                                 )
@@ -117,6 +137,7 @@ class EceranInValLPNActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<ResponseRcptLPN>, t: Throwable) {
+                        customDialog!!.dismiss()
                         Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_LONG).show()
                     }
 
@@ -141,6 +162,7 @@ class EceranInValLPNActivity : AppCompatActivity() {
     }
 
     private fun releaseRcptStatus(){
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -157,6 +179,7 @@ class EceranInValLPNActivity : AppCompatActivity() {
                 call: Call<ResponseRcptHeader>,
                 response: Response<ResponseRcptHeader>
             ) {
+                customDialog!!.dismiss()
                 /*removeSharedPreferences()
                 startActivity(
                     Intent(applicationContext, PenerimaanEceranActivity::class.java)
@@ -164,6 +187,7 @@ class EceranInValLPNActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseRcptHeader>, t: Throwable) {
+                customDialog!!.dismiss()
                 //Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_LONG).show()
             }
 
@@ -173,7 +197,9 @@ class EceranInValLPNActivity : AppCompatActivity() {
     private fun backBtnPressed(){
         val backBtn: ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
             releaseRcptStatus()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PenerimaanEceranActivity::class.java)
             )
@@ -183,7 +209,9 @@ class EceranInValLPNActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //super.onBackPressed()
+        customDialog!!.show()
         releaseRcptStatus()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, PenerimaanEceranActivity::class.java)
         )

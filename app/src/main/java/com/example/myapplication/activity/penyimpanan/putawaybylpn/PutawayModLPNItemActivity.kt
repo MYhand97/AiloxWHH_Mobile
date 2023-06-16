@@ -1,10 +1,12 @@
 package com.example.myapplication.activity.penyimpanan.putawaybylpn
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -33,7 +35,7 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
     private var swipeRefreshLayout : SwipeRefreshLayout? = null
     private var progressBar : ProgressBar? = null
     private var searchView : SearchView? = null
-
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,8 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initViews(){
+        initCustomDialog()
+
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val titleMenu : TextView = findViewById(R.id.submenu_title)
         titleMenu.text = session.getString("sub_menu_title", null)+
@@ -59,6 +63,13 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
         swipeRefresh()
         search(searchView!!)
         retrieveData()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PutawayModLPNItemActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun swipeRefresh(){
@@ -79,7 +90,7 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
     }
 
     private fun retrieveData(){
-        progressBar?.visibility = View.VISIBLE
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val tTotalQty : TextView = findViewById(R.id.total_qty)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
@@ -105,11 +116,11 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
                 adapterPutawayItemList!!.setListItem(list as MutableList<ResponsePutawayGetItemInLPN>)
                 recyclerView?.adapter = adapterPutawayItemList
                 adapterPutawayItemList!!.notifyDataSetChanged()
-                progressBar?.visibility = View.INVISIBLE
+                customDialog!!.dismiss()
             }
 
             override fun onFailure(call: Call<ResponseDataPutawayGetItemInLPN>, t: Throwable) {
-                //TODO("Not yet implemented")
+                customDialog!!.dismiss()
             }
 
         })
@@ -136,6 +147,8 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, PutawayModLocatingActivity::class.java)
         )
@@ -145,6 +158,8 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
     private fun backBtnPressed(){
         val backBtn : ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModLocatingActivity::class.java)
             )

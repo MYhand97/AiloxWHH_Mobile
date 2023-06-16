@@ -1,10 +1,12 @@
 package com.example.myapplication.activity.penerimaan.penerimaaneceran
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
@@ -38,6 +40,7 @@ class EceranInValItemAcitivity : AppCompatActivity() {
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var progressBar: ProgressBar? = null
     private var searchView: SearchView? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +60,8 @@ class EceranInValItemAcitivity : AppCompatActivity() {
     private fun backBtnPressed(){
         val backBtn: ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, EceranSubMenuActivity::class.java)
             )
@@ -66,6 +71,8 @@ class EceranInValItemAcitivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //super.onBackPressed()
+        customDialog!!.show()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, EceranSubMenuActivity::class.java)
         )
@@ -106,11 +113,20 @@ class EceranInValItemAcitivity : AppCompatActivity() {
             }
         }
 
+        initCustomDialog()
+
         backBtnPressed()
         setupRecycleView()
         swipeRefresh()
         search(searchView!!)
         retrieveData()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@EceranInValItemAcitivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun setupRecycleView(){
@@ -122,7 +138,7 @@ class EceranInValItemAcitivity : AppCompatActivity() {
     }
 
     private fun retrieveData(){
-        progressBar?.visibility = View.VISIBLE
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -164,10 +180,11 @@ class EceranInValItemAcitivity : AppCompatActivity() {
                 adapterEceranValItem!!.setListItem(list as MutableList<ResponseValItem>)
                 recyclerView?.adapter = adapterEceranValItem
                 adapterEceranValItem!!.notifyDataSetChanged()
-                progressBar?.visibility = View.INVISIBLE
+                customDialog!!.dismiss()
             }
 
             override fun onFailure(call: Call<ResponseEceranValItem>, t: Throwable) {
+                customDialog!!.dismiss()
                 Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_LONG).show()
             }
 
@@ -207,6 +224,7 @@ class EceranInValItemAcitivity : AppCompatActivity() {
     }
 
     private fun releaseRcptStatus(){
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -223,6 +241,7 @@ class EceranInValItemAcitivity : AppCompatActivity() {
                 call: Call<ResponseRcptHeader>,
                 response: Response<ResponseRcptHeader>
             ) {
+                customDialog!!.dismiss()
                 /*removeSharedPreferences()
                 startActivity(
                     Intent(applicationContext, PenerimaanEceranActivity::class.java)
@@ -231,6 +250,7 @@ class EceranInValItemAcitivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseRcptHeader>, t: Throwable) {
+                customDialog!!.dismiss()
                 //Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_LONG).show()
             }
         })

@@ -1,10 +1,12 @@
 package com.example.myapplication.activity.penyimpanan.putawaybylpn
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -33,6 +35,7 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var progressBar: ProgressBar? = null
     private var searchView: SearchView? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,8 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initViews(){
+        initCustomDialog()
+
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val title: TextView = findViewById(R.id.submenu_title)
         title.text = session.getString("sub_menu_title", null)+
@@ -59,6 +64,13 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
         retrieveData()
     }
 
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PutawayModLocatingManualActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
+    }
+
     private fun setupRecyclerView(){
         recyclerView = findViewById(R.id.recycler_view_pp1)
         swipeRefreshLayout = findViewById(R.id.swl_data_pp1)
@@ -68,7 +80,7 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
     }
 
     private fun retrieveData(){
-        progressBar?.visibility = View.VISIBLE
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -88,11 +100,13 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
                 adapterPutawayMasterLocation = AdapterPutawayMasterLocation(
                     applicationContext, list!!, object : AdapterPutawayMasterLocation.onAdapterListener{
                         override fun onClick(list: ResponsePutawayGetMasterLocation) {
+                            customDialog!!.show()
                             session.edit()
                                 .putString("loc_name_baru", list.loc_name)
                                 .putString("loc_cd_baru", list.loc_cd)
                                 .putString("locating_manual", "true")
                                 .apply()
+                            customDialog!!.dismiss()
                             startActivity(
                                 Intent(applicationContext, PutawayModInLocActivity::class.java)
                             )
@@ -102,10 +116,10 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
                 adapterPutawayMasterLocation!!.setListItem(list as MutableList<ResponsePutawayGetMasterLocation>)
                 recyclerView?.adapter = adapterPutawayMasterLocation
                 adapterPutawayMasterLocation!!.notifyDataSetChanged()
-                progressBar?.visibility = View.GONE
+                customDialog!!.dismiss()
             }
             override fun onFailure(call: Call<ResponseDataPutawayGetMasterLocation>, t: Throwable) {
-                TODO("Not yet implemented")
+                customDialog!!.dismiss()
             }
         })
     }
@@ -135,6 +149,8 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
     private fun backBtnPressed(){
         val backBtn : ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModLocatingActivity::class.java)
             )
@@ -144,6 +160,8 @@ class PutawayModLocatingManualActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, PutawayModLocatingActivity::class.java)
         )

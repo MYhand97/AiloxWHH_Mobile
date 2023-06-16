@@ -1,10 +1,12 @@
 package com.example.myapplication.activity.penerimaan
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -39,6 +41,7 @@ class PenerimaanEceranActivity : AppCompatActivity() {
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var progressBar: ProgressBar? = null
     private var searchView: SearchView? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +65,20 @@ class PenerimaanEceranActivity : AppCompatActivity() {
         searchView = findViewById(R.id.pp1_searchview)
         searchView!!.setOnClickListener { search(searchView!!) }
 
+        initCustomDialog()
+
         backBtnPressed()
         setupRecyclerView()
         swipeRefresh()
         search(searchView!!)
         retrieveData()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PenerimaanEceranActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun setupRecyclerView(){
@@ -78,7 +90,7 @@ class PenerimaanEceranActivity : AppCompatActivity() {
     }
 
     private fun retrieveData(){
-        progressBar?.visibility = View.VISIBLE
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val resData: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -98,6 +110,7 @@ class PenerimaanEceranActivity : AppCompatActivity() {
                 adapterPenerimaanEceran = AdapterPenerimaanEceran(
                     applicationContext, list!!, object : AdapterPenerimaanEceran.OnAdapterListener{
                         override fun onClick(list: ResponsePenerimaanEceran) {
+                            customDialog!!.show()
                             val rcptHeader: Call<ResponseRcptHeader> = resData.selectReceipt(
                                 RequestSelectRcpt(
                                     db_name = session.getString("db_name", null),
@@ -117,10 +130,12 @@ class PenerimaanEceranActivity : AppCompatActivity() {
                                             .putString("rcpt_header_id", list.rcpt_header_id)
                                             .putString("rcpt_number", list.rcpt_number)
                                             .apply()
+                                        customDialog!!.dismiss()
                                         startActivity(
                                             Intent(applicationContext, EceranInValLPNActivity::class.java)
                                         )
                                     }else{
+                                        customDialog!!.dismiss()
                                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                                     }
                                     //finish()
@@ -140,7 +155,7 @@ class PenerimaanEceranActivity : AppCompatActivity() {
                 adapterPenerimaanEceran!!.setListItems(list as MutableList<ResponsePenerimaanEceran>)
                 recyclerView?.adapter = adapterPenerimaanEceran
                 adapterPenerimaanEceran!!.notifyDataSetChanged()
-                progressBar?.visibility = View.INVISIBLE
+                customDialog!!.dismiss()
             }
 
             override fun onFailure(call: Call<ResponseGetPenerimaanEceran>, t: Throwable) {
@@ -191,12 +206,15 @@ class PenerimaanEceranActivity : AppCompatActivity() {
         val checkPageAccess = session.getString("fromBotNav", null)
         val backBtn: ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener{
+            customDialog!!.show()
             removeSharedPreferences()
             if(checkPageAccess.equals("true")){
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, HomeActivity::class.java)
                 )
             }else{
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, SubMenuActivity::class.java)
                 )
@@ -208,12 +226,15 @@ class PenerimaanEceranActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val checkPageAccess = session.getString("fromBotNav", null)
+        customDialog!!.show()
         removeSharedPreferences()
         if(checkPageAccess.equals("true")){
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, HomeActivity::class.java)
             )
         }else{
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, SubMenuActivity::class.java)
             )

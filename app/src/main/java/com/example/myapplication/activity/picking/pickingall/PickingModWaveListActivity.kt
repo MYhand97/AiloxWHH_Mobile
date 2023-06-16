@@ -134,7 +134,6 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun retrieveData(){
         customDialog!!.show()
-        //progressBar?.visibility = View.VISIBLE
 
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
@@ -164,7 +163,6 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 recyclerView?.adapter = adapterPickingAllModWaveList
                 adapterPickingAllModWaveList!!.notifyDataSetChanged()
                 customDialog!!.dismiss()
-                //progressBar?.visibility = View.INVISIBLE
             }
 
             override fun onFailure(call: Call<ResponsePickingDataModWaveList>, t: Throwable) {
@@ -240,7 +238,6 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         p0?.getItemAtPosition(p2)
         if(p0?.selectedItem == spinnerItemGroup?.selectedItem){
-            Toast.makeText(applicationContext, listItemGroupID[p2], Toast.LENGTH_SHORT).show()
             itemGroupID = listItemGroupID[p2]
             retrieveData()
         }

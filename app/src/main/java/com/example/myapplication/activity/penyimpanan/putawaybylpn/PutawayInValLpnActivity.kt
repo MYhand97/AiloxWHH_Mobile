@@ -1,8 +1,10 @@
 package com.example.myapplication.activity.penyimpanan.putawaybylpn
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -27,6 +29,7 @@ import retrofit2.Response
 class PutawayInValLpnActivity : AppCompatActivity() {
 
     private var list: ResponsePutawayGetAllocation? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +61,17 @@ class PutawayInValLpnActivity : AppCompatActivity() {
             requestCamera.launch(android.Manifest.permission.CAMERA)
         }
 
+        initCustomDialog()
+
         backBtnPressed()
         checkScanValue()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PutawayInValLpnActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun checkScanValue(){
@@ -68,7 +80,9 @@ class PutawayInValLpnActivity : AppCompatActivity() {
         val btnLanjut : Button = findViewById(R.id.btn_next)
 
         btnLanjut.setOnClickListener {
+            customDialog!!.show()
             if(edScanPallet.text!!.isEmpty()){
+                customDialog!!.dismiss()
                 edScanPallet.error = "Scan Pallet tidak boleh kosong"
             }else{
                 val res: RequestApi = ApiServer().koneksiRetrofit().create(
@@ -112,23 +126,26 @@ class PutawayInValLpnActivity : AppCompatActivity() {
                                             .putString("err_message", list?.err_message.toString())
                                             .putString("ship_number", list?.ship_number.toString())
                                             .apply()
+                                        customDialog!!.dismiss()
                                         startActivity(
                                             Intent(applicationContext, PutawayModLocatingActivity::class.java)
                                         )
                                     }
 
                                     override fun onFailure(call: Call<ResponseDataPutawayGetAllocation>, t: Throwable) {
-                                        //Toast.makeText(applicationContext, "Gagal"+t, Toast.LENGTH_SHORT).show()
+                                        customDialog!!.dismiss()
                                     }
 
                                 })
                             }
                             else -> {
+                                customDialog!!.dismiss()
                                 edScanPallet.error = response.body()?.message.toString()
                             }
                         }
                     }
                     override fun onFailure(call: Call<ResponsePutawayGetPalletNumber>, t: Throwable) {
+                        customDialog!!.dismiss()
                         Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_LONG).show()
                     }
                 })
@@ -150,12 +167,15 @@ class PutawayInValLpnActivity : AppCompatActivity() {
         val checkPageAccess = session.getString("fromBotNav", null)
         val backBtn: ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener{
+            customDialog!!.show()
             removeSharedPreferences()
             if(checkPageAccess.equals("true")){
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, HomeActivity::class.java)
                 )
             }else{
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, SubMenuActivity::class.java)
                 )
@@ -166,14 +186,17 @@ class PutawayInValLpnActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val checkPageAccess = session.getString("fromBotNav", null)
         removeSharedPreferences()
         if(checkPageAccess.equals("true")){
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, HomeActivity::class.java)
             )
         }else{
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, SubMenuActivity::class.java)
             )

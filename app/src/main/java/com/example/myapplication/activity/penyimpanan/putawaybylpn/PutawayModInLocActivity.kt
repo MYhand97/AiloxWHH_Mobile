@@ -1,9 +1,11 @@
 package com.example.myapplication.activity.penyimpanan.putawaybylpn
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -26,6 +28,7 @@ class PutawayModInLocActivity : AppCompatActivity() {
     private var list: List<ResponsePutawayCheckLocation>? = null
     private var loc_name : String? = null
     private var loc_cd : String? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +76,17 @@ class PutawayModInLocActivity : AppCompatActivity() {
             requestCamera.launch(android.Manifest.permission.CAMERA)
         }
 
+        initCustomDialog()
+
         backBtnPressed()
         checkScanValue()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PutawayModInLocActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun checkScanValue() {
@@ -83,7 +95,9 @@ class PutawayModInLocActivity : AppCompatActivity() {
         val btnLanjut : Button = findViewById(R.id.btn_next)
 
         btnLanjut.setOnClickListener {
+            customDialog!!.show()
             if(edScanLokasi.text!!.isEmpty()){
+                customDialog!!.dismiss()
                 edScanLokasi.error = "Scan Lokasi tidak boleh kosong"
             }else{
                 if(edScanLokasi.text.toString().equals(loc_cd.toString(), ignoreCase = true)){
@@ -109,20 +123,23 @@ class PutawayModInLocActivity : AppCompatActivity() {
                                     session.edit()
                                         .putString("loc_id" , list!![0].vLocId.toString())
                                         .apply()
+                                    customDialog!!.dismiss()
                                     startActivity(
                                         Intent(applicationContext, PutawayModDisplayLPNActivity::class.java)
                                     )
                                 }
                                 else -> {
+                                    customDialog!!.dismiss()
                                     edScanLokasi.error = message.toString()
                                 }
                             }
                         }
                         override fun onFailure(call: Call<ResponseDataCheckLocation>, t: Throwable) {
-                            TODO("Not yet implemented")
+                            customDialog!!.dismiss()
                         }
                     })
                 }else{
+                    customDialog!!.dismiss()
                     edScanLokasi.error = "Lokasi salah, simpan barang di lokasi "+loc_name
                 }
             }
@@ -132,6 +149,7 @@ class PutawayModInLocActivity : AppCompatActivity() {
     private fun backBtnPressed() {
         val backBtn: ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
             val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
             if(session.getString("locating_manual", null).equals("true", ignoreCase = true)){
                 session.edit()
@@ -139,11 +157,13 @@ class PutawayModInLocActivity : AppCompatActivity() {
                     .putString("loc_cd_baru", null)
                     .putString("locating_manual", null)
                     .apply()
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, PutawayModLocatingManualActivity::class.java)
                 )
                 finish()
             }else{
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, PutawayModLocatingActivity::class.java)
                 )
@@ -155,6 +175,7 @@ class PutawayModInLocActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         if(session.getString("locating_manual", null).equals("true", ignoreCase = true)){
             session.edit()
@@ -162,11 +183,13 @@ class PutawayModInLocActivity : AppCompatActivity() {
                 .putString("loc_cd_baru", null)
                 .putString("locating_manual", null)
                 .apply()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModLocatingManualActivity::class.java)
             )
             finish()
         }else{
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModLocatingActivity::class.java)
             )

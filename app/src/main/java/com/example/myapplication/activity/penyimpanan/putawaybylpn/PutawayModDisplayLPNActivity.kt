@@ -1,10 +1,12 @@
 package com.example.myapplication.activity.penyimpanan.putawaybylpn
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ProgressBar
@@ -39,6 +41,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
     private var searchView : SearchView? = null
     private var loc_name : String? = null
     private var loc_cd : String? = null
+    private var customDialog : Dialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,12 +82,21 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
         searchView = findViewById(R.id.pp1_searchview)
         searchView!!.setOnClickListener { search(searchView!!) }
 
+        initCustomDialog()
+
         backBtnPressed()
         setupRecyclerView()
         swipeRefresh()
         search(searchView!!)
         retrieveData()
         saveItem()
+    }
+
+    private fun initCustomDialog(){
+        customDialog = Dialog(this@PutawayModDisplayLPNActivity)
+        customDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        customDialog!!.setContentView(R.layout.dialog_progress)
+        customDialog!!.setCancelable(false)
     }
 
     private fun swipeRefresh() {
@@ -118,7 +130,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
     }
 
     private fun retrieveData() {
-        progressBar?.visibility = View.VISIBLE
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val tTotalQty : TextView = findViewById(R.id.total_qty)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
@@ -150,7 +162,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                 adapterPutawayModDisplayLPN!!.setListItem(list as MutableList<ResponsePutawayModDisplayLPN>)
                 recyclerView?.adapter = adapterPutawayModDisplayLPN
                 adapterPutawayModDisplayLPN!!.notifyDataSetChanged()
-                progressBar?.visibility = View.INVISIBLE
+                customDialog!!.dismiss()
             }
 
             override fun onFailure(call: Call<ResponseDataPutawayModDisplayLPN>, t: Throwable) {
@@ -165,6 +177,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
 
         val btnSimpan : Button = findViewById(R.id.btn_simpan)
         btnSimpan.setOnClickListener {
+            customDialog!!.show()
             val res : RequestApi = ApiServer().koneksiRetrofit().create(
                 RequestApi::class.java
             )
@@ -188,6 +201,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                     when(val message = response.body()?.message.toString()){
                         "Berhasil Simpan" -> {
                             removeSharedPreferences()
+                            customDialog!!.dismiss()
                             startActivity(
                                 Intent(applicationContext, PutawayInValLpnActivity::class.java)
                             )
@@ -195,6 +209,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                         }
                         else -> {
+                            customDialog!!.dismiss()
                             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
                         }
 
@@ -202,7 +217,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ResponseSaveItem>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    customDialog!!.dismiss()
                 }
 
             })
@@ -227,6 +242,8 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
+        customDialog!!.dismiss()
         startActivity(
             Intent(applicationContext, PutawayModInLocActivity::class.java)
         )
@@ -236,6 +253,8 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
     private fun backBtnPressed(){
         val backBtn : ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, PutawayModInLocActivity::class.java)
             )
