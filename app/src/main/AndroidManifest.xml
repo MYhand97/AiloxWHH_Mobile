@@ -21,9 +21,13 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.picking.pickingall.PickingModWaveListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.penyimpanan.putawaybylpn.PutawayModDisplayLPNActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.penyimpanan.putawaybylpn.PutawayScanModInLocActivity"
             android:exported="false" />

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -135,6 +134,7 @@ class PutawayModLPNItemActivity : AppCompatActivity() {
         retrieveData()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         startActivity(
             Intent(applicationContext, PutawayModLocatingActivity::class.java)

@@ -185,8 +185,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
                     call: Call<ResponseSaveItem>,
                     response: Response<ResponseSaveItem>
                 ) {
-                    val message = response.body()?.message.toString()
-                    when(message){
+                    when(val message = response.body()?.message.toString()){
                         "Berhasil Simpan" -> {
                             removeSharedPreferences()
                             startActivity(
@@ -226,6 +225,7 @@ class PutawayModDisplayLPNActivity : AppCompatActivity() {
             .apply()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         startActivity(
             Intent(applicationContext, PutawayModInLocActivity::class.java)

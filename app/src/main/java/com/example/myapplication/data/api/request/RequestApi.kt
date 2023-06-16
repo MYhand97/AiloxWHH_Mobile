@@ -11,6 +11,7 @@ import com.example.myapplication.data.api.response.ResponseSelectDB
 import com.example.myapplication.data.api.response.penerimaan.ResponseRcptHeader
 import com.example.myapplication.data.api.response.penerimaan.ResponseRcptLPN
 import com.example.myapplication.data.api.response.ResponseUserLogin
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModWaveList
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataCheckLocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetAllocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetItemInLPN
@@ -31,6 +32,7 @@ import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestSelec
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestTmpToReceipt
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestUpdateTmpReceive
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestValItem
+import com.example.myapplication.models.pengambilan.all.RequestPickingModWaveList
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestGetPalletNumber
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayCheckLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetAllocation
@@ -134,4 +136,10 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("penyimpanan/putaway_proses.php")
     fun putawaySaveItem(@Body dataPost: RequestSaveItem): Call<ResponseSaveItem>
+    // End Penyimpanan
+
+    // Pengambilan
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllModWaveList(@Body dataPost: RequestPickingModWaveList): Call<ResponsePickingDataModWaveList>
 }

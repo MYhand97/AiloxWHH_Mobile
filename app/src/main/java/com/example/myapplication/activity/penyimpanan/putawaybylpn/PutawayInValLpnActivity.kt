@@ -3,7 +3,6 @@ package com.example.myapplication.activity.penyimpanan.putawaybylpn
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -104,7 +103,6 @@ class PutawayInValLpnActivity : AppCompatActivity() {
                                         call: Call<ResponseDataPutawayGetAllocation>,
                                         response: Response<ResponseDataPutawayGetAllocation>
                                     ) {
-                                        val message = response.body()?.message
                                         list = response.body()?.data
                                         getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
                                             .edit()
@@ -166,6 +164,7 @@ class PutawayInValLpnActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val checkPageAccess = session.getString("fromBotNav", null)

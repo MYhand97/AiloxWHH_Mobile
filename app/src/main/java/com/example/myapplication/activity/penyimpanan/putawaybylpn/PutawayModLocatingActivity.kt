@@ -8,17 +8,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
-import com.example.myapplication.data.api.ApiServer
-import com.example.myapplication.data.api.request.RequestApi
-import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetAllocation
-import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetAllocation
-import com.example.myapplication.models.penyimpanan.putawaybylpn.ResponsePutawayGetAllocation
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class PutawayModLocatingActivity : AppCompatActivity() {
 
@@ -104,6 +95,7 @@ class PutawayModLocatingActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         removeSharedPreferences()
         startActivity(

@@ -10,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.edit
 import com.example.myapplication.R
 import com.example.myapplication.data.api.ApiServer
 import com.example.myapplication.data.api.request.RequestApi
@@ -154,6 +153,7 @@ class PutawayModInLocActivity : AppCompatActivity() {
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         if(session.getString("locating_manual", null).equals("true", ignoreCase = true)){
