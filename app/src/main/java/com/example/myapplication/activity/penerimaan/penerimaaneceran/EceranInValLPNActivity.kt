@@ -105,23 +105,7 @@ class EceranInValLPNActivity : AppCompatActivity() {
                         val message: String? = response.body()?.message
                         val data: List<ResponseLPN>? = response.body()?.data
                         when (message) {
-                            "LPN belum terdaftar" -> {
-                                customDialog!!.dismiss()
-                                edScanPallet.error = "LPN belum terdaftar"
-                            }
-                            "LPN ada lebih dari 1" -> {
-                                customDialog!!.dismiss()
-                                edScanPallet.error = "LPN ada lebih dari 1"
-                            }
-                            "LPN sedang di proses" -> {
-                                customDialog!!.show()
-                                edScanPallet.error = "LPN sedang di proses"
-                            }
-                            "LPN sudah di gunakan" -> {
-                                customDialog!!.show()
-                                edScanPallet.error = "LPN sudah di gunakan"
-                            }
-                            else -> {
+                            "" -> {
                                 getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
                                     .edit()
                                     .putString("lpn_id", data?.get(0)?.lpn_id)
@@ -131,7 +115,11 @@ class EceranInValLPNActivity : AppCompatActivity() {
                                     Intent(applicationContext, EceranSubMenuActivity::class.java)
                                 )
                                 //finish()
-                                //Toast.makeText(applicationContext, message+" - "+data?.get(0)?.lpn_id, Toast.LENGTH_SHORT).show()
+                                //Toast.makeText(applicationContext, message+" - "+data?.get(0)?.lpn_id, Toast.LENGTH_SHORT).show()customDialog!!.dismiss()
+                            }
+                            else -> {
+                                customDialog!!.dismiss()
+                                edScanPallet.error = message.toString()
                             }
                         }
                     }
@@ -162,7 +150,6 @@ class EceranInValLPNActivity : AppCompatActivity() {
     }
 
     private fun releaseRcptStatus(){
-        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -179,7 +166,6 @@ class EceranInValLPNActivity : AppCompatActivity() {
                 call: Call<ResponseRcptHeader>,
                 response: Response<ResponseRcptHeader>
             ) {
-                customDialog!!.dismiss()
                 /*removeSharedPreferences()
                 startActivity(
                     Intent(applicationContext, PenerimaanEceranActivity::class.java)
@@ -187,7 +173,6 @@ class EceranInValLPNActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseRcptHeader>, t: Throwable) {
-                customDialog!!.dismiss()
                 //Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_LONG).show()
             }
 

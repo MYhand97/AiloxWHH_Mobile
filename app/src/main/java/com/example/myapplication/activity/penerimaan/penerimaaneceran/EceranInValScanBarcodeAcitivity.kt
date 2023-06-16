@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
@@ -292,7 +291,7 @@ class EceranInValScanBarcodeAcitivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, message.toString(), Toast.LENGTH_SHORT).show()
                     customDialog!!.dismiss()
                     startActivity(
-                        Intent(applicationContext, EceranInValLPNActivity::class.java)
+                        Intent(applicationContext, EceranInValItemAcitivity::class.java)
                     )
                 }
             }
@@ -305,7 +304,6 @@ class EceranInValScanBarcodeAcitivity : AppCompatActivity() {
     }
 
     private fun releaseRcptStatus(){
-        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -322,7 +320,6 @@ class EceranInValScanBarcodeAcitivity : AppCompatActivity() {
                 call: Call<ResponseRcptHeader>,
                 response: Response<ResponseRcptHeader>
             ) {
-                customDialog!!.dismiss()
                 /*removeSharedPreferences()
                 startActivity(
                     Intent(applicationContext, PenerimaanEceranActivity::class.java)

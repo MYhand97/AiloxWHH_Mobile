@@ -12,7 +12,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-//import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
 import com.example.myapplication.activity.penerimaan.PenerimaanEceranActivity
 import com.example.myapplication.activity.penyimpanan.putawaybylpn.PutawayInValLpnActivity
@@ -32,6 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@Suppress("NAME_SHADOWING")
 class HomeActivity : AppCompatActivity() {
 
     private var recyclerView: RecyclerView? = null

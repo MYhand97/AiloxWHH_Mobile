@@ -115,6 +115,7 @@ class EceranSubMenuActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseGetSubMenu>, t: Throwable) {
+                customDialog!!.dismiss()
                 Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_SHORT).show()
             }
 
@@ -133,7 +134,6 @@ class EceranSubMenuActivity : AppCompatActivity() {
     }
 
     private fun releaseRcptStatus(){
-        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res: RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -150,7 +150,6 @@ class EceranSubMenuActivity : AppCompatActivity() {
                 call: Call<ResponseRcptHeader>,
                 response: Response<ResponseRcptHeader>
             ) {
-                customDialog!!.dismiss()
                 /*removeSharedPreferences()
                 startActivity(
                     Intent(applicationContext, PenerimaanEceranActivity::class.java)
