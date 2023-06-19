@@ -21,6 +21,17 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.picking.pickingall.PickingModLocListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.picking.pickingall.PickingScanLPNActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.picking.pickingall.PickingModInValLPNActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.picking.pickingall.PickingModWaveListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

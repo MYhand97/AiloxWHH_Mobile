@@ -1,7 +1,6 @@
 package com.example.myapplication.activity.picking.pickingall
 
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -47,8 +46,11 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private var customDialog : Dialog? = null
 
     private var listItemGroupID = ArrayList<String>()
+    private var listItemGroupOutPref = ArrayList<String>()
     private var listItemGroupName = ArrayList<String>()
+
     private var itemGroupID : String? = null
+    private var itemGroupOutPref : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,9 +117,14 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
             ) {
                 itemgroup = response.body()?.item_group
 
+                listItemGroupID.add("0")
+                listItemGroupName.add("-- Item Group --")
+                listItemGroupOutPref.add("")
+
                 itemgroup?.forEach{
                     listItemGroupID.add(it.item_group_id.toString())
                     listItemGroupName.add(it.item_group_name.toString())
+                    listItemGroupOutPref.add(it.outbound_pref_id.toString())
                 }
 
                 spinnerItemGroup!!.onItemSelectedListener = this@PickingModWaveListActivity
@@ -126,7 +133,7 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
 
             override fun onFailure(call: Call<ResponsePickingDataModWaveList>, t: Throwable) {
-
+                // do nothing
             }
 
         })
@@ -134,7 +141,6 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun retrieveData(){
         customDialog!!.show()
-
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
@@ -155,9 +161,21 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 adapterPickingAllModWaveList = AdapterPickingAllModWaveList(
                     applicationContext, wavelist!!, object : AdapterPickingAllModWaveList.OnAdapterListener{
                         override fun onClick(list: ModelsWaveList) {
-                            Toast.makeText(applicationContext, list.wave_plan_id, Toast.LENGTH_SHORT).show()
+                            customDialog!!.show()
+                            session.edit()
+                                .putString("item_group_id", itemGroupID)
+                                .putString("outbound_pref_id", itemGroupOutPref)
+                                .putString("wave_plan_id", list.wave_plan_id)
+                                .putString("wave_comment", list.wave_comment)
+                                .putString("no_so", list.no_so)
+                                .putString("cust_name", list.cust_name)
+                                .apply()
+                            customDialog!!.dismiss()
+                            startActivity(
+                                Intent(applicationContext, PickingModInValLPNActivity::class.java)
+                            )
+                            //Toast.makeText(applicationContext, list.wave_plan_id, Toast.LENGTH_SHORT).show()
                         }
-
                     })
                 adapterPickingAllModWaveList!!.setListItems(wavelist as MutableList<ModelsWaveList>)
                 recyclerView?.adapter = adapterPickingAllModWaveList
@@ -166,9 +184,10 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
 
             override fun onFailure(call: Call<ResponsePickingDataModWaveList>, t: Throwable) {
-
+                customDialog!!.dismiss()
+                Toast.makeText(applicationContext, "Gagal menghubungi server!", Toast.LENGTH_SHORT)
+                    .show()
             }
-
         })
     }
 
@@ -206,11 +225,14 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
         val checkPageAccess = session.getString("fromBotNav", null)
         val backBtn : ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
+            customDialog!!.show()
             if(checkPageAccess.equals("true")){
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, HomeActivity::class.java)
                 )
             }else{
+                customDialog!!.dismiss()
                 startActivity(
                     Intent(applicationContext, SubMenuActivity::class.java)
                 )
@@ -221,13 +243,16 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        customDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val checkPageAccess = session.getString("fromBotNav", null)
         if(checkPageAccess.equals("true")){
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, HomeActivity::class.java)
             )
         }else{
+            customDialog!!.dismiss()
             startActivity(
                 Intent(applicationContext, SubMenuActivity::class.java)
             )
@@ -238,13 +263,16 @@ class PickingModWaveListActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         p0?.getItemAtPosition(p2)
         if(p0?.selectedItem == spinnerItemGroup?.selectedItem){
-            itemGroupID = listItemGroupID[p2]
-            retrieveData()
+            if (p0?.selectedItem != "-- Item Group --"){
+                itemGroupID = listItemGroupID[p2]
+                itemGroupOutPref = listItemGroupOutPref[p2]
+                retrieveData()
+            }
         }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
-
+        // Do Nothing
     }
 
 }

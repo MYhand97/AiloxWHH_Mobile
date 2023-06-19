@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_1100"
-    tools:context=".activity.penerimaan.penerimaaneceran.EceranInValItemAcitivity">
+    tools:context=".activity.picking.pickingall.PickingModLocListActivity"
+    android:background="@color/teal_1100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/topBar"
@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:queryBackground="@android:color/transparent"
-        app:queryHint="Cari Barang..." />
+        app:queryHint="Cari Lokasi..." />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/title"
@@ -99,8 +99,7 @@
             android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_gravity="center"
-            android:text="Barang" />
+            android:text="Lokasi" />
 
         <View
             android:layout_width="1dp"
@@ -114,7 +113,7 @@
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:text="Scan" />
+            android:text="Pesan" />
 
         <View
             android:layout_width="1dp"
@@ -127,18 +126,9 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:text="Bisa Terima" />
+            android:text="Ambil" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <!--View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_15sdp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@id/swl_data_pp1"
-        app:layout_constraintTop_toBottomOf="@id/title" /-->
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@id/swl_data_pp1"
@@ -146,8 +136,8 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_10ssp"
         android:layout_marginEnd="@dimen/_10ssp"
-        android:layout_marginTop="@dimen/_1sdp"
         android:layout_marginBottom="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_1sdp"
         app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -160,12 +150,12 @@
             android:background="@color/white"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            tools:listitem="@layout/rows_penerimaan_eceran_item" />
+            tools:listitem="@layout/rows_picking_all_mod_loc_list" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/footer"
+        android:id="@id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -174,13 +164,14 @@
         android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@id/layoutButton"
+        app:layout_constraintBottom_toTopOf="@id/inputLayoutPallet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/swl_data_pp1">
 
         <TextView
-            android:layout_width="@dimen/_180sdp"
+            android:id="@+id/total_title"
+            android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_16sdp"
             android:text="Total" />
@@ -191,13 +182,28 @@
             android:background="@android:color/darker_gray" />
 
         <TextView
-            android:id="@+id/total_qty"
+            android:id="@+id/total_pesan"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="Pesan" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/total_ambil"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:text="Terima" />
+            android:text="Ambil" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -212,6 +218,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@id/inputLayoutPallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10sp"
+        android:layout_marginEnd="10sp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:paddingTop="@dimen/_10sdp"
+        app:counterMaxLength="100"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintBottom_toTopOf="@id/layoutButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Scan Lokasi">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ed_scanLokasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:maxLength="100" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <LinearLayout
         android:id="@id/layoutButton"
         android:layout_width="match_parent"
@@ -220,18 +252,33 @@
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_20sdp"
-        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutPallet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/btn_scan_barcode"
+            android:id="@+id/btn_lihat_pack"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:padding="@dimen/_15sdp"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="Lihat Isi"
+            android:textColor="@color/white"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@id/btn_scan"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:text="@string/scan"
             android:textColor="@color/white"
             android:background="@color/teal_700"
@@ -241,13 +288,13 @@
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
-            android:id="@+id/btn_penerimaan_simpan"
+            android:id="@+id/btn_next"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:padding="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/simpan"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:text="@string/lanjut"
             android:textColor="@color/white"
             android:background="@color/teal_700"
             android:clickable="true"
