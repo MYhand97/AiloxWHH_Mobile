@@ -21,9 +21,12 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.pengeluaran.DispatchModDispatchListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.picking.pickingall.PickingModLocListActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.picking.pickingall.PickingScanLPNActivity"
             android:exported="false" />
