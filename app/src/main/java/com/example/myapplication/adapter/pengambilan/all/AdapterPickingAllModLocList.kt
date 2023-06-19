@@ -66,14 +66,19 @@ class AdapterPickingAllModLocList(var context: Context, var list: List<ModelsMod
                     }
                 return filterResult
             }
-
             @SuppressLint("NotifyDataSetChanged")
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(p0: CharSequence?, p1: FilterResults) {
                 list = p1.values as List<ModelsModLocList>?
                 notifyDataSetChanged()
             }
-
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItemList(dataList: MutableList<ModelsModLocList>){
+        tableList = dataList.toMutableList()
+        list = tableList
+        notifyDataSetChanged()
     }
 }

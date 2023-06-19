@@ -154,4 +154,8 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
     fun pickingALlModLocList(@Body dataPost: RequestPickingModLocList): Call<ResponsePickingDataModLocList>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllCheckScanLoc()
 }
