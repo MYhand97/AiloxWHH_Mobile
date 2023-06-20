@@ -11,9 +11,11 @@ import com.example.myapplication.data.api.response.ResponseSelectDB
 import com.example.myapplication.data.api.response.penerimaan.ResponseRcptHeader
 import com.example.myapplication.data.api.response.penerimaan.ResponseRcptLPN
 import com.example.myapplication.data.api.response.ResponseUserLogin
-import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModInValLPN
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingCheckScanLoc
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingModInValLPN
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModLocList
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModWaveList
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingPackTypeList
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataCheckLocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetAllocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetItemInLPN
@@ -34,9 +36,11 @@ import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestSelec
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestTmpToReceipt
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestUpdateTmpReceive
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestValItem
+import com.example.myapplication.models.pengambilan.all.RequestPickingCheckScanLoc
 import com.example.myapplication.models.pengambilan.all.RequestPickingModInValLPN
 import com.example.myapplication.models.pengambilan.all.RequestPickingModLocList
 import com.example.myapplication.models.pengambilan.all.RequestPickingModWaveList
+import com.example.myapplication.models.pengambilan.all.RequestPickingPackTypeList
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestGetPalletNumber
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayCheckLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetAllocation
@@ -149,7 +153,11 @@ interface RequestApi {
 
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
-    fun pickingAllCheckScanLPN(@Body dataPost: RequestPickingModInValLPN): Call<ResponsePickingDataModInValLPN>
+    fun pickingAllPackTypeList(@Body dataPost: RequestPickingPackTypeList): Call<ResponsePickingPackTypeList>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllCheckScanLPN(@Body dataPost: RequestPickingModInValLPN): Call<ResponsePickingModInValLPN>
 
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
@@ -157,5 +165,5 @@ interface RequestApi {
 
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
-    fun pickingAllCheckScanLoc()
+    fun pickingAllCheckScanLoc(@Body dataPost: RequestPickingCheckScanLoc): Call<ResponsePickingCheckScanLoc>
 }

@@ -5,9 +5,13 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,18 +19,26 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
 import com.example.myapplication.data.api.ApiServer
 import com.example.myapplication.data.api.request.RequestApi
-import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModInValLPN
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingModInValLPN
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingPackTypeList
 import com.example.myapplication.models.pengambilan.all.RequestPickingModInValLPN
+import com.example.myapplication.models.pengambilan.all.RequestPickingPackTypeList
 import com.example.myapplication.models.pengambilan.all.models.ModelsPackTypeList
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PickingModInValLPNActivity : AppCompatActivity() {
+class PickingModInValLPNActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private var list : List<ModelsPackTypeList>? = null
     private var progressDialog : Dialog? = null
+    private var spinnerPackType : Spinner? = null
+
+    private var packList : List<ModelsPackTypeList>? = null
+    private var listPackTypeId = ArrayList<String>()
+    private var listPackTypeName = ArrayList<String>()
+    private var packTypeId : String? = null
+    private var packTypeName : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +52,8 @@ class PickingModInValLPNActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun initViews(){
         valueScan = findViewById(R.id.ed_scanPallet)
+
+        spinnerPackType = findViewById(R.id.spinner_pack_list)
 
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val titleMenu : TextView = findViewById(R.id.submenu_title)
@@ -64,6 +78,7 @@ class PickingModInValLPNActivity : AppCompatActivity() {
         }
 
         backBtnPressed()
+        spinnerPackType()
         checkScanValue()
     }
 
@@ -72,6 +87,39 @@ class PickingModInValLPNActivity : AppCompatActivity() {
         progressDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         progressDialog!!.setContentView(R.layout.dialog_progress)
         progressDialog!!.setCancelable(false)
+    }
+
+    private fun spinnerPackType(){
+        val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+        val res : RequestApi = ApiServer().koneksiRetrofit().create(
+            RequestApi::class.java
+        )
+        val row : Call<ResponsePickingPackTypeList> = res.pickingAllPackTypeList(
+            RequestPickingPackTypeList(
+                db_name = session.getString("db_name", null),
+                task = "get_pack_type"
+            )
+        )
+        row.enqueue(object : Callback<ResponsePickingPackTypeList>{
+            override fun onResponse(
+                call: Call<ResponsePickingPackTypeList>,
+                response: Response<ResponsePickingPackTypeList>
+            ) {
+                packList = response.body()?.pack_list
+                packList?.forEach{
+                    listPackTypeId.add(it.pack_type_id.toString())
+                    listPackTypeName.add(it.pack_type_name.toString())
+                }
+                spinnerPackType!!.onItemSelectedListener = this@PickingModInValLPNActivity
+                val adapter = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, listPackTypeName)
+                spinnerPackType!!.adapter = adapter
+            }
+
+            override fun onFailure(call: Call<ResponsePickingPackTypeList>, t: Throwable) {
+                // do nothing
+            }
+
+        })
     }
 
     private fun checkScanValue(){
@@ -87,7 +135,7 @@ class PickingModInValLPNActivity : AppCompatActivity() {
                 val res : RequestApi = ApiServer().koneksiRetrofit().create(
                     RequestApi::class.java
                 )
-                val row : Call<ResponsePickingDataModInValLPN> =
+                val row : Call<ResponsePickingModInValLPN> =
                     res.pickingAllCheckScanLPN(
                         RequestPickingModInValLPN(
                             db_name = session.getString("db_name", null),
@@ -96,19 +144,17 @@ class PickingModInValLPNActivity : AppCompatActivity() {
                             wave_plan_id = session.getString("wave_plan_id", null)
                         )
                     )
-                row.enqueue(object : Callback<ResponsePickingDataModInValLPN>{
+                row.enqueue(object : Callback<ResponsePickingModInValLPN>{
                     override fun onResponse(
-                        call: Call<ResponsePickingDataModInValLPN>,
-                        response: Response<ResponsePickingDataModInValLPN>
+                        call: Call<ResponsePickingModInValLPN>,
+                        response: Response<ResponsePickingModInValLPN>
                     ) {
-                        val message = response.body()!!.message
-                        list = response.body()!!.pack_list
-                        when(message){
+                        when(val message = response.body()!!.message){
                             "" -> {
                                 session.edit()
                                     .putString("lpn_id", edScanPallet.text.toString())
-                                    .putString("pack_type_id", list!![0].pack_type_id.toString())
-                                    .putString("pack_type_name", list!![0].pack_type_name.toString())
+                                    .putString("pack_type_id", packTypeId)
+                                    .putString("pack_type_name", packTypeName)
                                     .apply()
                                 progressDialog!!.dismiss()
                                 startActivity(
@@ -122,7 +168,7 @@ class PickingModInValLPNActivity : AppCompatActivity() {
                         }
                     }
                     override fun onFailure(
-                        call: Call<ResponsePickingDataModInValLPN>,
+                        call: Call<ResponsePickingModInValLPN>,
                         t: Throwable
                     ) {
                         progressDialog!!.dismiss()
@@ -169,5 +215,17 @@ class PickingModInValLPNActivity : AppCompatActivity() {
 
     companion object {
         var valueScan : TextInputEditText? = null
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        p0?.getItemAtPosition(p2)
+        if(p0?.selectedItem == spinnerPackType?.selectedItem){
+            packTypeId = listPackTypeId[p2]
+            packTypeName = listPackTypeName[p2]
+        }
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }

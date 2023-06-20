@@ -21,6 +21,9 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.picking.pickingall.PickingModLocItemListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.pengeluaran.DispatchModDispatchListActivity"
             android:exported="false" />
         <activity

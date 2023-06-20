@@ -19,7 +19,9 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.pengambilan.all.AdapterPickingAllModLocList
 import com.example.myapplication.data.api.ApiServer
 import com.example.myapplication.data.api.request.RequestApi
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingCheckScanLoc
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModLocList
+import com.example.myapplication.models.pengambilan.all.RequestPickingCheckScanLoc
 import com.example.myapplication.models.pengambilan.all.RequestPickingModLocList
 import com.example.myapplication.models.pengambilan.all.models.ModelsModLocList
 import com.google.android.material.textfield.TextInputEditText
@@ -50,7 +52,8 @@ class PickingModLocListActivity : AppCompatActivity() {
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val titleMenu : TextView = findViewById(R.id.submenu_title)
         titleMenu.text = session.getString("sub_menu_title", null)+
-                "\n"+session.getString("no_so", null)
+                "\n"+session.getString("no_so", null)+
+                "\n"+session.getString("pack_type_name", null)+": "+session.getString("lpn_id", null)
 
         searchView = findViewById(R.id.pp1_searchview)
         searchView!!.setOnClickListener {
@@ -63,6 +66,7 @@ class PickingModLocListActivity : AppCompatActivity() {
         setupRecyclerView()
         swipeRefresh()
         search(searchView!!)
+        checkScanValue()
         retrieveData()
     }
 
@@ -96,7 +100,7 @@ class PickingModLocListActivity : AppCompatActivity() {
             )
         )
         row.enqueue(object : Callback<ResponsePickingDataModLocList>{
-            @SuppressLint("NotifyDataSetChanged")
+            @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
             override fun onResponse(
                 call: Call<ResponsePickingDataModLocList>,
                 response: Response<ResponsePickingDataModLocList>
@@ -165,14 +169,46 @@ class PickingModLocListActivity : AppCompatActivity() {
     private fun checkScanValue(){
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val btnLanjut : Button = findViewById(R.id.btn_next)
-        val edScanLokasi : TextInputEditText = findViewById(R.id.ed_scanPallet)
+        val edScanLokasi : TextInputEditText = findViewById(R.id.ed_scanLokasi)
         btnLanjut.setOnClickListener {
             progressDialog!!.show()
             if(edScanLokasi.text!!.isEmpty()){
                 progressDialog!!.dismiss()
                 edScanLokasi.error = "Scan Lokasi tidak boleh kosong"
             }else{
+                val res : RequestApi = ApiServer().koneksiRetrofit().create(
+                    RequestApi::class.java
+                )
+                val row : Call<ResponsePickingCheckScanLoc> =
+                    res.pickingAllCheckScanLoc(
+                        RequestPickingCheckScanLoc(
+                            db_name = session.getString("db_name", null),
+                            task = "check_scan_mod_loc_list",
+                            loc_cd = edScanLokasi.text.toString(),
+                            wave_plan_id = session.getString("wave_plan_id", null)
+                        )
+                    )
+                row.enqueue(object : Callback<ResponsePickingCheckScanLoc>{
+                    override fun onResponse(
+                        call: Call<ResponsePickingCheckScanLoc>,
+                        response: Response<ResponsePickingCheckScanLoc>
+                    ) {
+                        when(response.body()?.message){
+                            "" -> {
+                                Toast.makeText(applicationContext, "Sukses", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                edScanLokasi.error = response.body()?.message.toString()
+                            }
+                        }
+                        progressDialog!!.dismiss()
+                    }
 
+                    override fun onFailure(call: Call<ResponsePickingCheckScanLoc>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
             }
         }
     }
