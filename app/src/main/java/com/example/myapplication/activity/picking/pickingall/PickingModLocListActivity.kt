@@ -111,20 +111,20 @@ class PickingModLocListActivity : AppCompatActivity() {
                 val tvTotalPesan : TextView = findViewById(R.id.total_pesan)
                 val tvTotalAmbil : TextView = findViewById(R.id.total_ambil)
 
-                var total_pesan = 0
-                var total_ambil = 0
-                var total_baris: String? = null
+                var totalPesan = 0
+                var totalAmbil = 0
+                var totalBaris: String? = null
 
                 data = response.body()?.data
                 data?.forEach {
-                    total_baris = it.jml_baris.toString()
-                    total_pesan = total_pesan.plus(it.qty!!.toInt())
-                    total_ambil = total_ambil.plus(it.qty_ambil!!.toInt())
+                    totalBaris = it.jml_baris.toString()
+                    totalPesan = totalPesan.plus(it.qty!!.toInt())
+                    totalAmbil = totalAmbil.plus(it.qty_ambil!!.toInt())
                 }
 
-                tvTotalTitle.text = "Total $total_baris Baris"
-                tvTotalAmbil.text = total_ambil.toString()
-                tvTotalPesan.text = total_pesan.toString()
+                tvTotalTitle.text = "Total $totalBaris Baris"
+                tvTotalAmbil.text = totalAmbil.toString()
+                tvTotalPesan.text = totalPesan.toString()
 
                 adapterPickingAllModLocList = AdapterPickingAllModLocList(
                     applicationContext, data!!, object : AdapterPickingAllModLocList.OnAdapterListener{
@@ -245,6 +245,7 @@ class PickingModLocListActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         progressDialog!!.show()
         removeSharedPreference()
