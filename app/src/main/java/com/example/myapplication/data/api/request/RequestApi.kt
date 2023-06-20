@@ -12,6 +12,7 @@ import com.example.myapplication.data.api.response.penerimaan.ResponseRcptHeader
 import com.example.myapplication.data.api.response.penerimaan.ResponseRcptLPN
 import com.example.myapplication.data.api.response.ResponseUserLogin
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingCheckScanLoc
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModLocItemList
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingModInValLPN
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModLocList
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModWaveList
@@ -38,6 +39,7 @@ import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestUpdat
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestValItem
 import com.example.myapplication.models.pengambilan.all.RequestPickingCheckScanLoc
 import com.example.myapplication.models.pengambilan.all.RequestPickingModInValLPN
+import com.example.myapplication.models.pengambilan.all.RequestPickingModLocItemList
 import com.example.myapplication.models.pengambilan.all.RequestPickingModLocList
 import com.example.myapplication.models.pengambilan.all.RequestPickingModWaveList
 import com.example.myapplication.models.pengambilan.all.RequestPickingPackTypeList
@@ -166,4 +168,8 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
     fun pickingAllCheckScanLoc(@Body dataPost: RequestPickingCheckScanLoc): Call<ResponsePickingCheckScanLoc>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllModLocItemList(@Body dataPost: RequestPickingModLocItemList): Call<ResponsePickingDataModLocItemList>
 }

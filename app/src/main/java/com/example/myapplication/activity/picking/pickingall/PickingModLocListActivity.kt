@@ -23,6 +23,7 @@ import com.example.myapplication.data.api.response.pengambilan.all.ResponsePicki
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModLocList
 import com.example.myapplication.models.pengambilan.all.RequestPickingCheckScanLoc
 import com.example.myapplication.models.pengambilan.all.RequestPickingModLocList
+import com.example.myapplication.models.pengambilan.all.models.ModelsLocation
 import com.example.myapplication.models.pengambilan.all.models.ModelsModLocList
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -34,6 +35,7 @@ class PickingModLocListActivity : AppCompatActivity() {
     private var recyclerView : RecyclerView? = null
     private var linearLayoutManager : LinearLayoutManager? = null
     private var data : List<ModelsModLocList>? = null
+    private var location : List<ModelsLocation>? = null
     private var adapterPickingAllModLocList : AdapterPickingAllModLocList? = null
     private var swipeRefreshLayout : SwipeRefreshLayout? = null
     private var searchView : SearchView? = null
@@ -193,8 +195,14 @@ class PickingModLocListActivity : AppCompatActivity() {
                         call: Call<ResponsePickingCheckScanLoc>,
                         response: Response<ResponsePickingCheckScanLoc>
                     ) {
+                        location = response.body()?.data
                         when(response.body()?.message){
                             "" -> {
+                                session.edit()
+                                    .putString("loc_id", location!![0].loc_id.toString())
+                                    .putString("loc_name", location!![0].loc_name.toString())
+                                    .putString("loc_cd", location!![0].loc_cd.toString())
+                                    .apply()
                                 Toast.makeText(applicationContext, "Sukses", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
@@ -205,7 +213,9 @@ class PickingModLocListActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<ResponsePickingCheckScanLoc>, t: Throwable) {
-                        TODO("Not yet implemented")
+                        progressDialog!!.dismiss()
+                        Toast.makeText(applicationContext, "Gagal menghubungi Server",
+                        Toast.LENGTH_SHORT).show()
                     }
 
                 })
