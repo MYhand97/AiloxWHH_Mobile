@@ -39,20 +39,21 @@
             android:layout_height="0dp"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0">
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,14 +86,14 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_pp1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:background="@color/white"
-        tools:listitem="@layout/rows_dispatch_mod_dispatch_list"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_pp1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            tools:listitem="@layout/rows_dispatch_mod_dispatch_list" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
