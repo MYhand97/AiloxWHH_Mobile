@@ -150,7 +150,7 @@
             android:background="@color/white"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            tools:listitem="@layout/rows_penerimaan_eceran_item" />
+            tools:listitem="@layout/rows_picking_all_mod_loc_item_list" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
