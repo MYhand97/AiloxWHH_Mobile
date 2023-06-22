@@ -4,6 +4,7 @@ class ModelsLocItemList {
     var wq_id : String? = null
     var from_location : String? = null
     var loc_name : String? = null
+    var loc_cd : String? = null
     var item_id : String? = null
     var item_number : String? = null
     var item_description : String? = null
@@ -14,7 +15,7 @@ class ModelsLocItemList {
     var qty_kurang : String? = null
     var jml_baris : String? = null
     constructor(
-        wq_id: String?, from_location: String?, loc_name: String?,
+        wq_id: String?, from_location: String?, loc_name: String?, loc_cd: String?,
         item_id: String?, item_number: String?, item_description: String?,
         roll_length: String?, lpn_id: String?, qty: String?,
         qty_ambil: String?, qty_kurang: String?, jml_baris: String?
@@ -22,6 +23,7 @@ class ModelsLocItemList {
         this.wq_id = wq_id
         this.from_location = from_location
         this.loc_name = loc_name
+        this.loc_cd = loc_cd
         this.item_id = item_id
         this.item_number = item_number
         this.item_description = item_description

@@ -21,9 +21,9 @@ class AdapterPickingAllModLocItemList(var context: Context, var list: List<Model
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvItemID : TextView = itemView.findViewById(R.id.item_id)
         var tvItemDescription : TextView = itemView.findViewById(R.id.item_description)
-        var tvItemNumber : TextView = itemView.findViewById(R.id.item_number)
-        var tvQty : TextView = itemView.findViewById(R.id.qty)
-        var tvQtyAmbil : TextView = itemView.findViewById(R.id.qty_ambil)
+        var tvItemNumber : TextView = itemView.findViewById(R.id.item_design)
+        var tvQty : TextView = itemView.findViewById(R.id.ordered_qty)
+        var tvQtyAmbil : TextView = itemView.findViewById(R.id.received_qty)
     }
 
     interface OnAdapterListener {
@@ -32,7 +32,7 @@ class AdapterPickingAllModLocItemList(var context: Context, var list: List<Model
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         val itemHolder = LayoutInflater.from(parent.context)
-            .inflate(R.layout.activity_picking_mod_loc_item_list, parent, false)
+            .inflate(R.layout.rows_picking_all_mod_loc_item_list, parent, false)
         return ItemHolder(itemHolder)
     }
 

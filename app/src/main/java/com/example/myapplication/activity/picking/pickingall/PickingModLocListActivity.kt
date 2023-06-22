@@ -129,9 +129,14 @@ class PickingModLocListActivity : AppCompatActivity() {
                 adapterPickingAllModLocList = AdapterPickingAllModLocList(
                     applicationContext, data!!, object : AdapterPickingAllModLocList.OnAdapterListener{
                         override fun OnClick(list: ModelsModLocList) {
-                            progressDialog!!.show()
-                            Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT).show()
-                            progressDialog!!.dismiss()
+                            session.edit()
+                                .putString("loc_id", list.from_location.toString())
+                                .putString("loc_name", list.loc_name.toString())
+                                .putString("loc_cd", list.loc_cd.toString())
+                                .apply()
+                            startActivity(
+                                Intent(applicationContext, PickingModLocItemListActivity::class.java)
+                            )
                         }
                     }
                 )
@@ -203,7 +208,9 @@ class PickingModLocListActivity : AppCompatActivity() {
                                     .putString("loc_name", location!![0].loc_name.toString())
                                     .putString("loc_cd", location!![0].loc_cd.toString())
                                     .apply()
-                                Toast.makeText(applicationContext, "Sukses", Toast.LENGTH_SHORT).show()
+                                startActivity(
+                                    Intent(applicationContext, PickingModLocItemListActivity::class.java)
+                                )
                             }
                             else -> {
                                 edScanLokasi.error = response.body()?.message.toString()

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_2sdp"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_title_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_700"
+        android:paddingStart="@dimen/_20ssp"
+        android:paddingEnd="@dimen/_20ssp"
+        android:outlineAmbientShadowColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/dialog_logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            android:id="@+id/dialog_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_10ssp"
+            android:paddingBottom="@dimen/_10ssp"
+            android:text="Logout"
+            android:textStyle="bold"
+            android:textSize="@dimen/_18ssp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray"
+        android:paddingStart="@dimen/_20ssp"
+        android:paddingEnd="@dimen/_20ssp"
+        android:outlineAmbientShadowColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/dialog_button_logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_title_logout"
+        app:layout_constraintVertical_bias="0">
+
+        <TextView
+            android:id="@+id/dialog_item_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_16ssp"
+            android:paddingBottom="@dimen/_20ssp"
+            android:paddingStart="@dimen/_20ssp"
+            android:paddingEnd="@dimen/_20ssp"
+            android:text="Anda akan logout dari Ailox"
+            android:textAlignment="center"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/teal_700"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/inputLayoutPallet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutPallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:paddingTop="@dimen/_10sdp"
+            app:counterMaxLength="100"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/dialog_item_msg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="Qty Barang">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dialog_ed_qty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:maxLength="100" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_button_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_20ssp"
+        android:paddingBottom="@dimen/_10ssp"
+        android:background="@color/gray"
+        android:outlineAmbientShadowColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_logout"
+        app:layout_constraintVertical_bias="0">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="@dimen/_90ssp"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:shadowColor="@color/white"
+            android:text="OK"
+            android:textColor="@color/white"
+            tools:ignore="TextContrastCheck"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_cancel_logout"/>
+
+        <Button
+            android:id="@+id/btn_cancel_logout"
+            android:layout_width="@dimen/_90ssp"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:shadowColor="@color/white"
+            android:text="Cancel"
+            android:textColor="@color/white"
+            tools:ignore="TextContrastCheck"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_ok"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
