@@ -237,13 +237,13 @@
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
-            android:id="@+id/btn_penerimaan_simpan"
+            android:id="@+id/btn_pengambilan_simpan"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:padding="@dimen/_15sdp"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:text="@string/simpan"
+            android:text="AMBIL"
             android:textColor="@color/white"
             android:background="@color/teal_700"
             android:clickable="true"

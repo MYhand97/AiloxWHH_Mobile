@@ -20,9 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.picking.pickingall.PickingScanLocListActivity"
+            android:exported="false"/>
+        <activity android:name=".activity.picking.pickingall.PickingScanBarcodeActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.picking.pickingall.PickingInValScanBarcodeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.picking.pickingall.PickingModLocItemListActivity"
             android:exported="false"

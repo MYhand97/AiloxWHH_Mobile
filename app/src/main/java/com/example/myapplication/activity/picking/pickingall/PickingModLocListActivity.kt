@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,6 +52,8 @@ class PickingModLocListActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
+        valueScan = findViewById(R.id.ed_scanLokasi)
+
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val titleMenu : TextView = findViewById(R.id.submenu_title)
         titleMenu.text = session.getString("sub_menu_title", null)+
@@ -60,6 +63,22 @@ class PickingModLocListActivity : AppCompatActivity() {
         searchView = findViewById(R.id.pp1_searchview)
         searchView!!.setOnClickListener {
             search(searchView!!)
+        }
+
+        val requestCamera = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+            if(it){
+                startActivity(
+                    Intent(applicationContext, PickingScanLocListActivity::class.java)
+                )
+            }else{
+                Toast.makeText(applicationContext, "Camera Permission not granted", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+        val btnScan : Button = findViewById(R.id.btn_scan)
+        btnScan.setOnClickListener {
+            requestCamera.launch(android.Manifest.permission.CAMERA)
         }
 
         initProgressDialog()
@@ -239,6 +258,12 @@ class PickingModLocListActivity : AppCompatActivity() {
             .apply()
     }
 
+    override fun onResume() {
+        super.onResume()
+        swipeRefresh()
+        retrieveData()
+    }
+
     private fun backBtnPressed() {
         val backBtn : ConstraintLayout = findViewById(R.id.submenu_backicon)
         backBtn.setOnClickListener {
@@ -260,6 +285,10 @@ class PickingModLocListActivity : AppCompatActivity() {
         startActivity(
             Intent(applicationContext, PickingModInValLPNActivity::class.java)
         )
+    }
+
+    companion object {
+        var valueScan : TextInputEditText? = null
     }
 
 }

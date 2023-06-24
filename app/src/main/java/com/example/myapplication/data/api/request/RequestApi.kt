@@ -16,6 +16,7 @@ import com.example.myapplication.data.api.response.pengambilan.all.ResponsePicki
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingModInValLPN
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModLocList
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModWaveList
+import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingGetTmpPick
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingPackTypeList
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataCheckLocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetAllocation
@@ -37,12 +38,20 @@ import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestSelec
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestTmpToReceipt
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestUpdateTmpReceive
 import com.example.myapplication.models.penerimaan.penerimaaneceran.RequestValItem
+import com.example.myapplication.models.penerimaan.penerimaaneceran.ResponseGetTmpReceive
 import com.example.myapplication.models.pengambilan.all.RequestPickingCheckScanLoc
+import com.example.myapplication.models.pengambilan.all.RequestPickingConfirmWave
+import com.example.myapplication.models.pengambilan.all.RequestPickingGetTmpPick
 import com.example.myapplication.models.pengambilan.all.RequestPickingModInValLPN
 import com.example.myapplication.models.pengambilan.all.RequestPickingModLocItemList
 import com.example.myapplication.models.pengambilan.all.RequestPickingModLocList
 import com.example.myapplication.models.pengambilan.all.RequestPickingModWaveList
 import com.example.myapplication.models.pengambilan.all.RequestPickingPackTypeList
+import com.example.myapplication.models.pengambilan.all.RequestPickingPostToTmpPick
+import com.example.myapplication.models.pengambilan.all.RequestPickingTmpToWQ
+import com.example.myapplication.models.pengambilan.all.RequestPickingUpdateTmpPick
+import com.example.myapplication.models.pengambilan.all.models.ModelsMessage
+import com.example.myapplication.models.pengambilan.all.models.ModelsWQMessage
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestGetPalletNumber
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayCheckLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetAllocation
@@ -172,4 +181,24 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
     fun pickingAllModLocItemList(@Body dataPost: RequestPickingModLocItemList): Call<ResponsePickingDataModLocItemList>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllGetTmpPick(@Body dataPost: RequestPickingGetTmpPick): Call<ResponsePickingGetTmpPick>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllPostToTmp(@Body dataPost: RequestPickingPostToTmpPick): Call<ModelsMessage>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllUpdateTmpPick(@Body dataPost: RequestPickingUpdateTmpPick): Call<ModelsMessage>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingALlTmpToWQ(@Body dataPost: RequestPickingTmpToWQ): Call<ModelsWQMessage>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengambilan/picking_all_proses.php")
+    fun pickingAllConfirmWave(@Body dataPost: RequestPickingConfirmWave) : Call<ModelsWQMessage>
 }

@@ -60,6 +60,13 @@ class PickingModLocItemListActivity : AppCompatActivity() {
             search(searchView!!)
         }
 
+        val btnScan : Button = findViewById(R.id.btn_scan)
+        btnScan.setOnClickListener {
+            startActivity(
+                Intent(applicationContext, PickingInValScanBarcodeActivity::class.java)
+            )
+        }
+
         initProgressDialog()
         initItemDialog()
         setupRecyclerView()
@@ -202,6 +209,12 @@ class PickingModLocItemListActivity : AppCompatActivity() {
             .putString("loc_name", null)
             .putString("loc_cd", null)
             .apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        swipeRefresh()
+        retrieveData()
     }
 
     private fun backBtnPressed(){

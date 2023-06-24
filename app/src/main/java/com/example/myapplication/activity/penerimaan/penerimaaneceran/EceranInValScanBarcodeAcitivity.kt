@@ -247,7 +247,8 @@ class EceranInValScanBarcodeAcitivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseRcptHeader>, t: Throwable) {
-                TODO("Not yet implemented")
+                customDialog!!.dismiss()
+                Toast.makeText(applicationContext, "Gagal menghubungi Server", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -297,7 +298,8 @@ class EceranInValScanBarcodeAcitivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseRcptHeader>, t: Throwable) {
-                TODO("Not yet implemented")
+                customDialog!!.dismiss()
+                Toast.makeText(applicationContext, "Gagal menghubungi Server", Toast.LENGTH_SHORT).show()
             }
 
         })
