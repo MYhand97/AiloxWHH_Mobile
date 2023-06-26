@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.activity.penerimaan.PenerimaanEceranActivity
+import com.example.myapplication.activity.pengeluaran.DispatchModWaveListActivity
 import com.example.myapplication.activity.penyimpanan.putawaybylpn.PutawayInValLpnActivity
 import com.example.myapplication.activity.picking.pickingall.PickingModWaveListActivity
 import com.example.myapplication.adapter.AdapterGetSubMenu
@@ -118,6 +119,18 @@ class SubMenuActivity : AppCompatActivity() {
                                     .apply()
                                 startActivity(
                                     Intent(applicationContext, PickingModWaveListActivity::class.java)
+                                )
+                            }
+                            "DispatchPack" -> {
+                                getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+                                    .edit()
+                                    .putString("fromBotNav", "false")
+                                    .putString("sub_menu_id", list.sub_menu_id)
+                                    .putString("sub_menu_title", list.sub_menu_title)
+                                    .putString("sub_menu_action", list.sub_menu_action)
+                                    .apply()
+                                startActivity(
+                                    Intent(applicationContext, DispatchModWaveListActivity::class.java)
                                 )
                             }
                             else -> {

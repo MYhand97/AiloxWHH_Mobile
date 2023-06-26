@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.activity.penerimaan.PenerimaanEceranActivity
+import com.example.myapplication.activity.pengeluaran.DispatchModWaveListActivity
 import com.example.myapplication.activity.penyimpanan.putawaybylpn.PutawayInValLpnActivity
 import com.example.myapplication.activity.picking.pickingall.PickingModWaveListActivity
 import com.example.myapplication.adapter.AdapterGetMainMenu
@@ -464,7 +465,20 @@ class HomeActivity : AppCompatActivity() {
                     pengeluaranMenu.setOnMenuItemClickListener { item ->
                         when (item!!.itemId) {
                             item.itemId ->
-                                Toast.makeText(applicationContext, "Cannot find any action", Toast.LENGTH_SHORT).show()
+                                if(listsubmenuPengeluaran!![item.itemId].sub_menu_action.toString() == "DispatchPack"){
+                                    getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+                                        .edit()
+                                        .putString("fromBotNav", "true")
+                                        .putString("sub_menu_id", listsubmenuPengeluaran!![item.itemId].sub_menu_id)
+                                        .putString("sub_menu_title", listsubmenuPengeluaran!![item.itemId].sub_menu_title)
+                                        .putString("sub_menu_action", listsubmenuPengeluaran!![item.itemId].sub_menu_action)
+                                        .apply()
+                                    startActivity(
+                                        Intent(applicationContext, DispatchModWaveListActivity::class.java)
+                                    )
+                                }else{
+                                    Toast.makeText(applicationContext, "Cannot find any action", Toast.LENGTH_SHORT).show()
+                                }
                         }
                         true
                     }

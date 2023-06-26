@@ -18,6 +18,8 @@ import com.example.myapplication.data.api.response.pengambilan.all.ResponsePicki
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingDataModWaveList
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingGetTmpPick
 import com.example.myapplication.data.api.response.pengambilan.all.ResponsePickingPackTypeList
+import com.example.myapplication.data.api.response.pengeluaran.ResponseDispModSoList
+import com.example.myapplication.data.api.response.pengeluaran.ResponseDispModWaveList
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataCheckLocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetAllocation
 import com.example.myapplication.data.api.response.penyimpanan.ResponseDataPutawayGetItemInLPN
@@ -52,6 +54,8 @@ import com.example.myapplication.models.pengambilan.all.RequestPickingTmpToWQ
 import com.example.myapplication.models.pengambilan.all.RequestPickingUpdateTmpPick
 import com.example.myapplication.models.pengambilan.all.models.ModelsMessage
 import com.example.myapplication.models.pengambilan.all.models.ModelsWQMessage
+import com.example.myapplication.models.pengeluaran.pack.RequestDispModSoList
+import com.example.myapplication.models.pengeluaran.pack.RequestDispModWaveList
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestGetPalletNumber
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayCheckLocation
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayGetAllocation
@@ -61,6 +65,7 @@ import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestPutawayM
 import com.example.myapplication.models.penyimpanan.putawaybylpn.RequestSaveItem
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -201,4 +206,16 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("pengambilan/picking_all_proses.php")
     fun pickingAllConfirmWave(@Body dataPost: RequestPickingConfirmWave) : Call<ModelsWQMessage>
+    // End pengambilan
+
+    // Pengaluaran
+    @Headers("Content-Type: application/json")
+    @POST("pengeluaran/dispatch_proses.php")
+    fun dispatchPackModWaveList(@Body dataPost: RequestDispModWaveList): Call<ResponseDispModWaveList>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengeluaran/dispatch_proses.php")
+    fun dispatchPackModSoList(@Body dataPost: RequestDispModSoList): Call<ResponseDispModSoList>
+
+    // End Pengeluaran
 }

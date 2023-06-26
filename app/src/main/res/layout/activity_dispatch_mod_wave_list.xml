@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.pengeluaran.DispatchModDispatchListActivity"
+    tools:context=".activity.pengeluaran.DispatchModWaveListActivity"
     android:background="@color/teal_1100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +19,7 @@
         >
 
         <TextView
+            android:id="@id/submenu_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_21sdp"
@@ -34,7 +35,7 @@
             android:text="Pengeluaran"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/submenu_backicon"
+            android:id="@id/submenu_backicon"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="0dp"
             android:clickable="true"
@@ -60,7 +61,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/pp1_searchview"
+        android:id="@id/pp1_searchview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -74,10 +75,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:queryBackground="@android:color/transparent"
-        app:queryHint="Cari..."/>
+        app:queryHint="Cari Customer..."/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/swl_data_pp1"
+    android:id="@id/swl_data_pp1"
     android:layout_width="match_parent"
     android:layout_margin="@dimen/_10ssp"
     android:layout_height="0dp"
@@ -87,13 +88,13 @@
     app:layout_constraintStart_toStartOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_pp1"
+            android:id="@id/recycler_view_pp1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            tools:listitem="@layout/rows_dispatch_mod_dispatch_list" />
+            tools:listitem="@layout/rows_dispatch_mod_wave_list" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

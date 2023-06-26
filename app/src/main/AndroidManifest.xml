@@ -20,21 +20,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.picking.pickingall.PickingScanLocListActivity"
-            android:exported="false"/>
-        <activity android:name=".activity.picking.pickingall.PickingScanBarcodeActivity"
+        <activity
+            android:name=".activity.pengeluaran.DispatchModSoListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.picking.pickingall.PickingScanLocListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.picking.pickingall.PickingScanBarcodeActivity"
             android:exported="false" />
         <activity
             android:name=".activity.picking.pickingall.PickingInValScanBarcodeActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.picking.pickingall.PickingModLocItemListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.pengeluaran.DispatchModDispatchListActivity"
-            android:exported="false" />
+            android:name=".activity.pengeluaran.DispatchModWaveListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.picking.pickingall.PickingModLocListActivity"
             android:exported="false"
