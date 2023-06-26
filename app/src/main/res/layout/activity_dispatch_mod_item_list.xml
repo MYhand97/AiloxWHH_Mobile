@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.pengeluaran.DispatchModSoListActivity"
+    tools:context=".activity.pengeluaran.DispatchModItemListActivity"
     android:background="@color/teal_1100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:queryBackground="@android:color/transparent"
-        app:queryHint="Cari TO..." />
+        app:queryHint="Cari Barang..." />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/title"
@@ -98,7 +99,7 @@
             android:layout_width="@dimen/_162sdp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:text="Nomor TO" />
+            android:text="Barang" />
 
         <View
             android:layout_width="1dp"
@@ -111,7 +112,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:text="Tgl" />
+            android:text="Pack" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -135,7 +136,7 @@
             android:background="@color/white"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            tools:listitem="@layout/rows_dispatch_mod_so_list" />
+            tools:listitem="@layout/rows_dispatch_mod_item_list" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -149,18 +150,62 @@
         android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/_15sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layoutButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/swl_data_pp1">
 
         <TextView
             android:id="@+id/total_baris"
-            android:layout_width="@dimen/_180sdp"
+            android:layout_width="@dimen/_162sdp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:text="Total" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/total_qty"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="Pack" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <LinearLayout
+        android:id="@id/layoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btn_dispatch_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="Dispatch All"
+            android:textColor="@color/white"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

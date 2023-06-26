@@ -15,31 +15,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.R
-import com.example.myapplication.adapter.pengeluaran.AdapterDispModSoList
+import com.example.myapplication.adapter.pengeluaran.AdapterDispModItemList
 import com.example.myapplication.data.api.ApiServer
 import com.example.myapplication.data.api.request.RequestApi
-import com.example.myapplication.data.api.response.pengeluaran.ResponseDispModSoList
-import com.example.myapplication.models.pengeluaran.pack.RequestDispModSoList
-import com.example.myapplication.models.pengeluaran.pack.models.ModelsDispModSoList
+import com.example.myapplication.data.api.response.pengeluaran.ResponseDispModItemList
+import com.example.myapplication.models.pengeluaran.pack.RequestDispModItemList
+import com.example.myapplication.models.pengeluaran.pack.models.ModelsDispModItemList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DispatchModSoListActivity : AppCompatActivity() {
+class DispatchModItemListActivity : AppCompatActivity() {
 
     private var recyclerView : RecyclerView? = null
     private var linearLayoutManager : LinearLayoutManager? = null
-    private var adapterDispModSoList : AdapterDispModSoList? = null
+    private var adapterDispModItemList : AdapterDispModItemList? = null
     private var swipeRefreshLayout : SwipeRefreshLayout? = null
     private var progressDialog : Dialog? = null
     private var searchView : SearchView? = null
-    private var data : List<ModelsDispModSoList>? = null
+    private var data : List<ModelsDispModItemList>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         @Suppress("DEPRECATION")
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        setContentView(R.layout.activity_dispatch_mod_so_list)
+        setContentView(R.layout.activity_dispatch_mod_item_list)
 
         initViews()
     }
@@ -51,19 +51,16 @@ class DispatchModSoListActivity : AppCompatActivity() {
         retrieveData()
     }
 
-    private fun initProgressDialog(){
-        progressDialog = Dialog(this@DispatchModSoListActivity)
-        progressDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        progressDialog!!.setContentView(R.layout.dialog_progress)
-        progressDialog!!.setCancelable(false)
-    }
-
     @SuppressLint("SetTextI18n")
-    private fun initViews(){
+    private fun initViews() {
+        DispatchModInValLpnActivity.valueScan = findViewById(R.id.ed_scan_pack)
+
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val title : TextView = findViewById(R.id.submenu_title)
         title.text = session.getString("sub_menu_title", null)+
-                "\n"+session.getString("cust_name", null)
+                "\n"+session.getString("cust_name", null)+
+                "\n"+session.getString("ship_number", null)+
+                "@"+session.getString("lpn_id", null)
 
         searchView = findViewById(R.id.pp1_searchview)
         searchView!!.setOnClickListener {
@@ -79,6 +76,13 @@ class DispatchModSoListActivity : AppCompatActivity() {
         retrieveData()
     }
 
+    private fun initProgressDialog(){
+        progressDialog = Dialog(this@DispatchModItemListActivity)
+        progressDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog!!.setContentView(R.layout.dialog_progress)
+        progressDialog!!.setCancelable(false)
+    }
+
     private fun setupRecyclerView(){
         recyclerView = findViewById(R.id.recycler_view_pp1)
         swipeRefreshLayout = findViewById(R.id.swl_data_pp1)
@@ -91,50 +95,48 @@ class DispatchModSoListActivity : AppCompatActivity() {
         progressDialog!!.show()
         val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         val totalRow : TextView = findViewById(R.id.total_baris)
+        val QtyTotal : TextView = findViewById(R.id.total_qty)
         val res : RequestApi = ApiServer().koneksiRetrofit().create(
             RequestApi::class.java
         )
-        val row : Call<ResponseDispModSoList> = res.dispatchPackModSoList(
-            RequestDispModSoList(
+        val row : Call<ResponseDispModItemList> = res.dispatchPackModItemList(
+            RequestDispModItemList(
                 db_name = session.getString("db_name", null),
-                task = "mod_so_list",
-                cust_id = session.getString("cust_id", null)
+                task = "mod_item_list",
+                wave_plans_id = session.getString("wave_plans_id", null),
+                lpn_id = session.getString("lpn_id", null)
             )
         )
-        row.enqueue(object : Callback<ResponseDispModSoList>{
+        row.enqueue(object : Callback<ResponseDispModItemList>{
             @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
             override fun onResponse(
-                call: Call<ResponseDispModSoList>,
-                response: Response<ResponseDispModSoList>
+                call: Call<ResponseDispModItemList>,
+                response: Response<ResponseDispModItemList>
             ) {
-                data = response.body()?.data
-                val total_baris = data!!.size
-                totalRow.text = "Total: $total_baris SO"
-                adapterDispModSoList = AdapterDispModSoList(
-                    applicationContext, data!!, object : AdapterDispModSoList.OnAdapterListener{
-                        override fun onClick(list: ModelsDispModSoList) {
-                            progressDialog!!.show()
-                            session.edit()
-                                .putString("ship_header_id", list.ship_header_id.toString())
-                                .putString("ship_number", list.ship_number.toString())
-                                .putString("ship_date", list.ship_date.toString())
-                                .putString("company_id", list.company_id.toString())
-                                .putString("whouse_id", list.whouse_id.toString())
-                                .putString("ship_header_user_def1", list.ship_header_user_def1.toString())
-                                .putString("ship_header_user_def2", list.ship_header_user_def2.toString())
-                                .apply()
-                            startActivity(
-                                Intent(applicationContext, DispatchModInValDnActivity::class.java)
-                            )
-                            progressDialog!!.dismiss()
+                data = response.body()!!.data
+
+                var totalQty = 0
+                data?.forEach{
+                    totalQty = totalQty.plus(it.pack_qty!!.toInt())
+                }
+
+                totalRow.text = "Total: "+data!!.size+" Baris"
+                QtyTotal.text = totalQty.toString()
+
+                adapterDispModItemList = AdapterDispModItemList(
+                    applicationContext, data!!, object : AdapterDispModItemList.OnAdapterListener{
+                        override fun onClick(list: ModelsDispModItemList) {
+                            Toast.makeText(applicationContext, list.item_number, Toast.LENGTH_SHORT)
+                                .show()
                         }
                     })
-                adapterDispModSoList!!.setItemList(data as MutableList<ModelsDispModSoList>)
-                recyclerView?.adapter = adapterDispModSoList
-                adapterDispModSoList!!.notifyDataSetChanged()
+                adapterDispModItemList!!.setItemList(data as MutableList<ModelsDispModItemList>)
+                recyclerView?.adapter = adapterDispModItemList
+                adapterDispModItemList!!.notifyDataSetChanged()
                 progressDialog!!.dismiss()
             }
-            override fun onFailure(call: Call<ResponseDispModSoList>, t: Throwable) {
+
+            override fun onFailure(call: Call<ResponseDispModItemList>, t: Throwable) {
                 progressDialog!!.dismiss()
                 Toast.makeText(applicationContext, "Gagal menghubungi server!", Toast.LENGTH_SHORT)
                     .show()
@@ -157,17 +159,17 @@ class DispatchModSoListActivity : AppCompatActivity() {
                 return false
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-                adapterDispModSoList?.filter?.filter(newText)
+                adapterDispModItemList?.filter?.filter(newText)
                 return true
             }
         })
     }
 
     private fun removeSharedPreferences(){
-        getSharedPreferences("ailoxwms_data", MODE_PRIVATE).edit()
-            .putString("cust_id", null)
-            .putString("cust_code", null)
-            .putString("cust_name", null)
+        getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+            .edit()
+            .putString("wave_plans_id", null)
+            .putString("lpn_id", null)
             .apply()
     }
 
@@ -178,7 +180,7 @@ class DispatchModSoListActivity : AppCompatActivity() {
             removeSharedPreferences()
             progressDialog!!.dismiss()
             startActivity(
-                Intent(applicationContext, DispatchModWaveListActivity::class.java)
+                Intent(applicationContext, DispatchModInValLpnActivity::class.java)
             )
             finish()
         }
@@ -190,9 +192,8 @@ class DispatchModSoListActivity : AppCompatActivity() {
         removeSharedPreferences()
         progressDialog!!.dismiss()
         startActivity(
-            Intent(applicationContext, DispatchModWaveListActivity::class.java)
+            Intent(applicationContext, DispatchModInValLpnActivity::class.java)
         )
         finish()
     }
-
 }

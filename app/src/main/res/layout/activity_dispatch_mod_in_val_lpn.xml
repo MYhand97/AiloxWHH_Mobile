@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.pengeluaran.DispatchModSoListActivity"
+    tools:context=".activity.pengeluaran.DispatchModInValLpnActivity"
     android:background="@color/teal_1100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +77,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:queryBackground="@android:color/transparent"
-        app:queryHint="Cari TO..." />
+        app:queryHint="Cari LPN..." />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/title"
@@ -98,7 +98,7 @@
             android:layout_width="@dimen/_162sdp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:text="Nomor TO" />
+            android:text="Nomor LPN" />
 
         <View
             android:layout_width="1dp"
@@ -111,7 +111,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:text="Tgl" />
+            android:text="Isi" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -121,8 +121,8 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_10ssp"
         android:layout_marginEnd="@dimen/_10ssp"
-        android:layout_marginTop="@dimen/_1sdp"
         android:layout_marginBottom="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_1sdp"
         app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,12 +135,12 @@
             android:background="@color/white"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            tools:listitem="@layout/rows_dispatch_mod_so_list" />
+            tools:listitem="@layout/rows_dispatch_mod_in_val_lpn" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/footer"
+        android:id="@id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -149,7 +149,7 @@
         android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/_15sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/inputLayoutPallet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/swl_data_pp1">
@@ -161,6 +161,93 @@
             android:layout_marginEnd="@dimen/_16sdp"
             android:text="Total" />
 
+
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@id/inputLayoutPallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:paddingTop="@dimen/_10sdp"
+        app:counterMaxLength="100"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintBottom_toTopOf="@id/layoutButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="Scan Label Pack">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ed_scan_pack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:maxLength="100" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@id/layoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutPallet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btn_lihat_pack"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="Lihat Isi"
+            android:textColor="@color/white"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@id/btn_scan"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/scan"
+            android:textColor="@color/white"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/lanjut"
+            android:textColor="@color/white"
+            android:background="@color/teal_700"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@
             android:padding="@dimen/_15sdp">
 
             <TextView
-                android:id="@+id/ship_id"
+                android:id="@+id/wave_plan_ids"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_50sdp"
@@ -40,7 +40,7 @@
                 android:layout_marginEnd="@dimen/_10sdp">
 
                 <TextView
-                    android:id="@+id/ship_number"
+                    android:id="@+id/pack_lpn_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Item Number"
@@ -55,7 +55,7 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/ship_date"
+                android:id="@+id/opd_pack_qty"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"

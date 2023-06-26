@@ -21,8 +21,34 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.pengeluaran.DispatchModSoListActivity"
+            android:name=".activity.pengeluaran.DispatchModItemListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.pengeluaran.DispatchScanValLpnActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.pengeluaran.DispatchModInValLpnActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.pengeluaran.DispatchScanResiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.pengeluaran.DispatchModInValResiActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.pengeluaran.DispatchScanDnActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.pengeluaran.DispatchModInValDnActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.pengeluaran.DispatchModSoListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.picking.pickingall.PickingScanLocListActivity"
             android:exported="false" />
