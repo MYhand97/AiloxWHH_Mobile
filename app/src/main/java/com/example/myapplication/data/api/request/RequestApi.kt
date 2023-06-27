@@ -57,6 +57,7 @@ import com.example.myapplication.models.pengambilan.all.models.ModelsMessage
 import com.example.myapplication.models.pengambilan.all.models.ModelsWQMessage
 import com.example.myapplication.models.pengeluaran.pack.RequestDispModInValLpn
 import com.example.myapplication.models.pengeluaran.pack.RequestDispModItemList
+import com.example.myapplication.models.pengeluaran.pack.RequestDispModSaveAll
 import com.example.myapplication.models.pengeluaran.pack.RequestDispModSoList
 import com.example.myapplication.models.pengeluaran.pack.RequestDispModWaveList
 import com.example.myapplication.models.pengeluaran.pack.RequestDispScanValLpn
@@ -232,6 +233,10 @@ interface RequestApi {
     @Headers("Content-Type: application/json")
     @POST("pengeluaran/dispatch_proses.php")
     fun dispatchPackModItemList(@Body dataPost: RequestDispModItemList): Call<ResponseDispModItemList>
+
+    @Headers("Content-Type: application/json")
+    @POST("pengeluaran/dispatch_proses.php")
+    fun dispatchPackModSaveAll(@Body dataPost: RequestDispModSaveAll): Call<ModelsMessage>
 
     // End Pengeluaran
 }

@@ -41,13 +41,14 @@ class AdapterDispModItemList(
         return list!!.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         val model : ModelsDispModItemList = list!![position]
         holder.tvPackDetailId.text = model.pack_detail_id.toString()
         holder.tvDispDetailId.text = model.disp_detail_id.toString()
         holder.tvItemId.text = model.item_id.toString()
         holder.tvItemNumber.text = model.item_number.toString()
-        holder.tvPackQty.text = model.pack_qty.toString()
+        holder.tvPackQty.text = model.pack_qty.toString()+" "+model.uom.toString()
         holder.itemView.setOnClickListener {
             listener.onClick(model)
         }
