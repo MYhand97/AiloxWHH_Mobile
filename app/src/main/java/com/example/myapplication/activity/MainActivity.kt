@@ -47,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         retrieveSelectDB()
     }
 
+    override fun onBackPressed() {
+        finishAffinity()
+        finish()
+    }
+
     private fun setupRecyclerView(){
         recyclerView = findViewById(R.id.my_recycleview)
         swipeRefreshLayout = findViewById(R.id.swl_data)

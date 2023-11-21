@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import android.widget.*
@@ -31,9 +32,10 @@ import com.example.myapplication.models.ResponseSubMenu
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.example.myapplication.UserTimeout
 
 @Suppress("NAME_SHADOWING")
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), LogoutActivity {
 
     private var recyclerView: RecyclerView? = null
     private var linearLayoutManager: LinearLayoutManager? = null
@@ -51,51 +53,29 @@ class HomeActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_home)
-
-        val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
-        if(session.getString("username", null) != null){
-            initViews()
-        }else{
-            val dbData: RequestApi = ApiServer().koneksiRetrofit().create(
-                RequestApi::class.java
-            )
-            val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
-            val userLogout: Call<ResponseUserLogin> = dbData.userLogout(
-                RequestModelsUsers(
-                    db_name = session.getString("db_name", null),
-                    username = session.getString("username", null),
-                    password = "transmarco"
-                )
-            )
-            userLogout.enqueue(object: Callback<ResponseUserLogin>{
-                override fun onResponse(
-                    call: Call<ResponseUserLogin>,
-                    response: Response<ResponseUserLogin>
-                ) {
-                    getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
-                        .edit()
-                        .putString("db_name", null)
-                        .putString("userid", null)
-                        .putString("username", null)
-                        .putString("user_fullname", null)
-                        .putString("user_group_id", null)
-                        .putString("is_login", null)
-                        .apply()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                    Toast.makeText(applicationContext, "Ailox : Anda Telah Logout", Toast.LENGTH_LONG).show()
-                }
-                override fun onFailure(call: Call<ResponseUserLogin>, t: Throwable) {
-
-                }
-            })
-        }
+        initViews()
     }
 
     override fun onResume() {
         super.onResume()
         retrieveMainMenu()
         initCustomDialog()
+        if(TimeoutUtils.checkTimeout(UserTimeout.lastUserActivityTimestamp)){
+            logout()
+        }
         userLogout()
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        UserTimeout.lastUserActivityTimestamp = System.currentTimeMillis()
+        Log.d("YourActivity", "onUserInteraction: ${UserTimeout.lastUserActivityTimestamp}")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        UserTimeout.lastUserActivityTimestamp = System.currentTimeMillis()
+        Log.d("YourActivity", "onPause: ${UserTimeout.lastUserActivityTimestamp}")
     }
 
     private fun initViews(){
@@ -119,41 +99,8 @@ class HomeActivity : AppCompatActivity() {
         val btnLogout: Button = customDialog!!.findViewById(R.id.btn_logout)
         val btnCancelLogout: Button = customDialog!!.findViewById(R.id.btn_cancel_logout)
 
-        val dbData: RequestApi = ApiServer().koneksiRetrofit().create(
-            RequestApi::class.java
-        )
-
-        val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
         btnLogout.setOnClickListener {
-            val userLogout: Call<ResponseUserLogin> = dbData.userLogout(
-                RequestModelsUsers(
-                    db_name = session.getString("db_name", null),
-                    username = session.getString("username", null),
-                    password = "transmarco"
-                )
-            )
-            userLogout.enqueue(object: Callback<ResponseUserLogin>{
-                override fun onResponse(
-                    call: Call<ResponseUserLogin>,
-                    response: Response<ResponseUserLogin>
-                ) {
-                    getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
-                        .edit()
-                        .putString("db_name", null)
-                        .putString("userid", null)
-                        .putString("username", null)
-                        .putString("user_fullname", null)
-                        .putString("user_group_id", null)
-                        .putString("is_login", null)
-                        .apply()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                    customDialog!!.dismiss()
-                    Toast.makeText(applicationContext, "Ailox : Anda Telah Logout", Toast.LENGTH_LONG).show()
-                }
-                override fun onFailure(call: Call<ResponseUserLogin>, t: Throwable) {
-
-                }
-            })
+            logout()
         }
         btnCancelLogout.setOnClickListener {
             customDialog!!.dismiss()
@@ -167,43 +114,9 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         customDialog!!.show()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        val dbData: RequestApi = ApiServer().koneksiRetrofit().create(
-            RequestApi::class.java
-        )
-        val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
-        val userLogout: Call<ResponseUserLogin> = dbData.userLogout(
-            RequestModelsUsers(
-                db_name = session.getString("db_name", null),
-                username = session.getString("username", null),
-                password = "transmarco"
-            )
-        )
-        userLogout.enqueue(object: Callback<ResponseUserLogin>{
-            override fun onResponse(
-                call: Call<ResponseUserLogin>,
-                response: Response<ResponseUserLogin>
-            ) {
-                getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
-                    .edit()
-                    .putString("db_name", null)
-                    .putString("userid", null)
-                    .putString("username", null)
-                    .putString("user_fullname", null)
-                    .putString("user_group_id", null)
-                    .putString("is_login", null)
-                    .apply()
-                Toast.makeText(applicationContext, "Ailox : Anda Telah Logout", Toast.LENGTH_LONG).show()
-            }
-            override fun onFailure(call: Call<ResponseUserLogin>, t: Throwable) {
-
-            }
-        })
     }
 
     private fun setupRecycleView(){
@@ -240,6 +153,7 @@ class HomeActivity : AppCompatActivity() {
                         startActivity(
                             Intent(applicationContext, SubMenuActivity::class.java)
                         )
+                        finish()
                     }
                 })
 
@@ -248,6 +162,44 @@ class HomeActivity : AppCompatActivity() {
             }
             override fun onFailure(call: Call<ResponseGetMainMenu>, t: Throwable) {
                 Toast.makeText(applicationContext, "Gagal Menghubungi Server!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    override fun logout() {
+        val dbData: RequestApi = ApiServer().koneksiRetrofit().create(
+            RequestApi::class.java
+        )
+        val session = getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+        val userLogout: Call<ResponseUserLogin> = dbData.userLogout(
+            RequestModelsUsers(
+                db_name = session.getString("db_name", null),
+                username = session.getString("username", null),
+                password = "transmarco"
+            )
+        )
+        userLogout.enqueue(object: Callback<ResponseUserLogin>{
+            override fun onResponse(
+                call: Call<ResponseUserLogin>,
+                response: Response<ResponseUserLogin>
+            ) {
+                getSharedPreferences("ailoxwms_data", MODE_PRIVATE)
+                    .edit()
+                    .putString("db_name", null)
+                    .putString("userid", null)
+                    .putString("username", null)
+                    .putString("user_fullname", null)
+                    .putString("user_group_id", null)
+                    .putString("is_login", null)
+                    .apply()
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+                customDialog!!.dismiss()
+                Toast.makeText(applicationContext, "Ailox : Anda Telah Logout", Toast.LENGTH_LONG).show()
+                finishAffinity()
+                finish()
+            }
+            override fun onFailure(call: Call<ResponseUserLogin>, t: Throwable) {
+
             }
         })
     }
@@ -380,6 +332,8 @@ class HomeActivity : AppCompatActivity() {
                                     startActivity(
                                         Intent(applicationContext, PenerimaanEceranActivity::class.java)
                                     )
+                                    finishAffinity()
+                                    finish()
                                 }else{
                                     Toast.makeText(applicationContext, "Cannot find any action", Toast.LENGTH_SHORT).show()
                                 }
@@ -412,6 +366,8 @@ class HomeActivity : AppCompatActivity() {
                                     startActivity(
                                         Intent(applicationContext, PutawayInValLpnActivity::class.java)
                                     )
+                                    finishAffinity()
+                                    finish()
                                 }else{
                                     Toast.makeText(applicationContext, "Cannot find any action", Toast.LENGTH_SHORT).show()
                                 }
@@ -444,6 +400,8 @@ class HomeActivity : AppCompatActivity() {
                                     startActivity(
                                         Intent(applicationContext, PickingModWaveListActivity::class.java)
                                     )
+                                    finishAffinity()
+                                    finish()
                                 }else{
                                     Toast.makeText(applicationContext, "Cannot find any action", Toast.LENGTH_SHORT).show()
                                 }
@@ -476,6 +434,8 @@ class HomeActivity : AppCompatActivity() {
                                     startActivity(
                                         Intent(applicationContext, DispatchModWaveListActivity::class.java)
                                     )
+                                    finishAffinity()
+                                    finish()
                                 }else{
                                     Toast.makeText(applicationContext, "Cannot find any action", Toast.LENGTH_SHORT).show()
                                 }
